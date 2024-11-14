@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+/* global.css */
+body {
+    background-color: white;
+    color: black;
+  }
+  
+  /* Add this to globals.css or in the head of your document */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+  
