@@ -9,12 +9,15 @@ import BasicTimePicker from '../utils/timepicker';
 import {useTaskHandler}  from '../hooks/inputhanddler';
 import { useListHandler } from '../hooks/listhanddler';
 import { useTimePicker } from '../hooks/usetimepicker';
+import { useSessionData } from '../hooks/useSession';
+import Link from 'next/link';
 
 
 
 export default function InputBox() {
   const { theme } = useTheme();
    const {triggerfetch}= useListHandler()
+   const {session}= useSessionData()
   
 
   
@@ -70,9 +73,13 @@ export default function InputBox() {
        </div>
      
     
-        <button onClick={handleAddTask} className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
+        {!session&&<Link href={'/auth'}><button className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
         Add task
-        </button>
+        </button></Link>}
+        {session&&<button onClick={handleAddTask} className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
+        Add task
+        </button>}
+
       </div>
     </div>
   );

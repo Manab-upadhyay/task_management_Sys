@@ -58,16 +58,7 @@ export default function List() {
  
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full">
-      {loading ? (
-    <ClipLoader
-      color="#36D399"
-      loading={loading}
-      cssOverride={override}
-      size={80}
-      aria-label="Loading Spinner"
-      data-testid="loader"
-    />
-  ) : taskdata.length === 0 ? (
+      { taskdata.length === 0 ? (
     <div className="flex flex-col items-center justify-center h-64 text-gray-500 animate-fadeIn">
       <svg
         className="w-16 h-16 mb-4 text-gray-400 animate-pulse"
@@ -85,12 +76,18 @@ export default function List() {
       </svg>
       <p className="text-lg font-semibold animate-fadeIn">No tasks added yet</p>
       <p className="text-sm animate-fadeIn">Add new tasks to get started</p>
-      <Link href={"/"}><button
+      {session&&<Link href={"/"}><button
         className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transform transition-transform duration-200 ease-in-out animate-bounce"
    
       >
         Add a Task
-      </button></Link>
+      </button></Link>}
+      {!session&&<Link href={"/auth"}><button
+        className="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg shadow-md hover:bg-green-600 transform transition-transform duration-200 ease-in-out animate-bounce"
+   
+      >
+        Add a Task
+      </button></Link>}
     </div>
   ) : filterdata.length === 0 ? (
     <div className="flex flex-col items-center justify-center h-64 text-gray-500 animate-fadeIn">
@@ -113,7 +110,7 @@ export default function List() {
 
    
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-3/4 ml-56 mb-48">
+     {!loading&& <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-3/4 ml-56 mb-48">
  
         
         
@@ -200,9 +197,10 @@ export default function List() {
                   <GoDotFill className="text-orange-500 mr-2" />
                   {task.title}
                 </h3>
-                <p className="text-sm text-gray-500 dark:text-gray-300">
-                  {task.description}
-                </p>
+                <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+  {task.description}
+</p>
+<hr></hr>
                 <div className="flex items-center gap-2 mt-4 text-sm text-sky-600 dark:text-sky-300 bg-sky-100 dark:bg-slate-700 rounded-lg px-2 py-1 shadow-inner">
   <CiCalendarDate className="text-lg" />
   <p>{new Date(task.date).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>
@@ -216,7 +214,17 @@ export default function List() {
             )}
           </div>
         ))}
-      </div>
+      </div>}
+      {loading &&
+    <ClipLoader
+      color="#36D399"
+      loading={loading}
+      cssOverride={override}
+      size={80}
+      aria-label="Loading Spinner"
+      data-testid="loader"
+    />
+  }
 
       {/* Modal for Delete Confirmation */}
       {showModal && (

@@ -100,9 +100,9 @@ console.log("u-tsk",taskdata)
               <GoDotFill className="text-orange-500 mr-2" />
               {task.title}
             </h3>
-            <p className="text-sm text-gray-500 dark:text-gray-300">
-              {task.description}
-            </p>
+            <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
+  {task.description}
+</p>
             <div className="flex items-center gap-2 mt-4 text-sm text-sky-600 dark:text-sky-300 bg-sky-100 dark:bg-slate-700 rounded-lg px-2 py-1 shadow-inner">
   <CiCalendarDate className="text-lg" />
   <p>{new Date(task.date).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>

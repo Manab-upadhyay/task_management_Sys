@@ -27,7 +27,7 @@ const useManageTask=()=>{
     const [show, setshow]= useState(false)
     const [showModal, setShowModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
-  const [loading, setloading]= useState(true)
+  const [loading, setloading]= useState(false)
     const handleEditClick = (task:any) => {
         setEditTaskId(task.id);
         setEditedTask({ title: task.title, description: task.description, time: task.time, date: task.date, completed: task.completed });
@@ -38,6 +38,8 @@ const useManageTask=()=>{
         setEditedTask((prev) => ({ ...prev, [name]: value }));
       };
     const getdata=async()=>{
+      if(session){
+        setloading(true)
         try {
             const data= await fetch('https://localhost:3000/api/Addtask') 
             console.log(data)
@@ -50,6 +52,7 @@ const useManageTask=()=>{
         }finally{
           setloading(false)
         }
+      }
     }
     const handleDeleteClick = (task:any) => {
       setTaskToDelete(task);

@@ -14,6 +14,7 @@ export default function Notifications() {
     const date = new Date(milliseconds);
     return date.toLocaleString(); // Format the date to a readable format
   };
+  console.log("noti", notifications)
 
   return (
     <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-xl rounded-lg p-6 w-96 z-10`}>

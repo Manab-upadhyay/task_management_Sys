@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
 import { useSessionData } from "./useSession";
+import { fetchData } from "next-auth/client/_utils";
 
  function NotificationHandler() {
   const [notifications, setNotifications] = useState([]);
 const {session}= useSessionData()
-useEffect(()=>{
-  
 
+  
+useEffect(()=>{
+  fetchNotifications()
+},[])
     async function fetchNotifications() {
       try {
         const response = await fetch("https://localhost:3000/api/send-notification");
@@ -21,9 +24,9 @@ useEffect(()=>{
       }
     }
 
-   fetchNotifications() // Fetch notifications once on component mount
+    // Fetch notifications once on component mount
    
- },[])
+
   const handleDelete = async (id:any) => {
     try {
       console.log("Deleting notification with id:", id);
@@ -46,6 +49,6 @@ useEffect(()=>{
       console.error("Error deleting notification:", error);
     }
   };
-  return {notifications,handleDelete}
+  return {notifications,handleDelete, fetchNotifications}
 }
 export {NotificationHandler}

@@ -11,13 +11,16 @@ interface Task {
   time: string;
 }
 const useListHandler = () => {
-  const { taskdata, setTaskData, loading, setLoading } = useTaskStore();
+  const { taskdata, setTaskData, } = useTaskStore();
   const { session } = useSessionData();
   const [showModel, setShowModel]= useState(false)
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
+  const [loading, setLoading]= useState(false)
 
   const getTask = async () => {
+    if(session){
     setLoading(true);
+    
     try {
       console.log("Fetching tasks...");
       const response = await fetch('https://localhost:3000/api/Addtask', {
@@ -32,6 +35,7 @@ const useListHandler = () => {
     } finally {
       setLoading(false);
     }
+  }
   };
 const handdleDelete=(task:Task)=>{
 setTaskToDelete(task)
@@ -57,8 +61,7 @@ const deleteTask = async (id: number) => {
     });
 
     
-    setTaskData([...taskdata.filter((task) => task.id !== id)]);
-
+    setTaskData(taskdata.filter((task: any) => task.id !== id));
 
   } catch (error) {
     console.log("Error deleting task", error);
