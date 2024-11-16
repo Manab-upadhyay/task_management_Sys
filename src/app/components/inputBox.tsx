@@ -22,7 +22,7 @@ export default function InputBox() {
     onAddTask, 
     title, 
     description, 
-    onDescriptionChange }= useTaskHandler()
+    onDescriptionChange,error }= useTaskHandler()
 
 
     const handleAddTask = async () => {
@@ -36,6 +36,9 @@ export default function InputBox() {
         Add Your Task
       </h6>
       <div className={`${theme==='dark'?"bg-slate-700 ":"bg-orange-200"} w-full h-82 rounded-lg shadow-lg p-6 border border-gray-300 ml-20`}>
+        {error&&<div>
+          <h1 className='text-red-600'>{error}</h1>
+          </div>}
         <label className="block mb-2 text-gray-700 font-medium">
           Enter the task:
           <input

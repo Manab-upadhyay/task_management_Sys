@@ -1,10 +1,20 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTaskStore } from "../zunstand/taskstore";
 import { useSessionData } from "./useSession";
-
+import { DialogBox } from "../models/dialog";
+interface Task {
+  id: number;
+  title: string;
+  description: string;
+  completed: boolean;
+  date: string;
+  time: string;
+}
 const useListHandler = () => {
   const { taskdata, setTaskData, loading, setLoading } = useTaskStore();
   const { session } = useSessionData();
+  const [showModel, setShowModel]= useState(false)
+  const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
 
   const getTask = async () => {
     setLoading(true);
@@ -23,7 +33,37 @@ const useListHandler = () => {
       setLoading(false);
     }
   };
+const handdleDelete=(task:Task)=>{
+setTaskToDelete(task)
+  setShowModel(true)
 
+
+}
+const confirmDelete=()=>{
+  if(taskToDelete){
+    deleteTask(taskToDelete.id)
+    setShowModel(false)
+  }
+}
+const deleteTask = async (id: number) => {
+  try {
+    console.log("id>>",id)
+    await fetch('https://localhost:3000/api/Addtask', {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ id }) // Send the ID as a JSON object
+    });
+
+    
+    setTaskData([...taskdata.filter((task) => task.id !== id)]);
+
+
+  } catch (error) {
+    console.log("Error deleting task", error);
+  }
+};
   useEffect(() => {
     if (session) {
       getTask(); // Only run if session data is available
@@ -34,7 +74,7 @@ const useListHandler = () => {
     await getTask();
   };
 
-  return { taskdata, loading, getTask, triggerfetch };
+  return { taskdata, loading, getTask, triggerfetch,showModel,handdleDelete ,confirmDelete,setShowModel};
 };
 
 export { useListHandler };

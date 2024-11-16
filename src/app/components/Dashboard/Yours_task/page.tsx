@@ -98,14 +98,14 @@ export default function List() {
     </div>
   ) : (
     <h1
-      className={`${
-        theme === 'dark'
-          ? "text-slate-100 bg-gradient-to-r from-black to-slate-700"
-          : "text-slate-800 bg-gradient-to-r from-slate-300 to-slate-100"
-      } mt-0 font-sans font-medium text-lg sm:text-xl md:text-xl mb-6 text-center w-full py-3 rounded-lg shadow-lg shadow-slate-500/10 hover:shadow-slate-500/20 transition-all duration-300 ease-in-out`}
-    >
-      Your Added Tasks:
-    </h1>
+  className={`${
+    theme === 'dark'
+      ? "text-black bg-transparent"
+      : "text-white bg-transparent"
+  } mt-0 font-serif font-bold text-xl sm:text-2xl md:text-2xl mb-6 text-center w-full py-3 rounded-lg transition-all duration-300 ease-in-out`}
+>
+  Your Added Tasks:
+</h1>
       )}
 
       

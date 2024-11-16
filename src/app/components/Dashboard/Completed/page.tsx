@@ -86,6 +86,7 @@ useEffect(()=>{
             <p className="text-sm text-gray-500 dark:text-gray-300">
               {task.description}
             </p>
+            <hr></hr>
             <div className="flex items-center gap-2 mt-4 text-sm text-sky-600 dark:text-sky-300 bg-sky-100 dark:bg-slate-700 rounded-lg px-2 py-1 shadow-inner">
   <CiCalendarDate className="text-lg" />
   <p>{new Date(task.date).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>

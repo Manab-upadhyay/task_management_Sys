@@ -7,7 +7,7 @@ import Notifications from './Notification';
 import { useDropdownToggler } from '../hooks/toggleDropdown';
 import { ModeToggle } from '../hooks/Theme';
 import { useModal } from '../context/LoginModel';
-import LoginModal from './Login';
+
 import UserProfile from './userprofile';
 import { useSessionData } from '../hooks/useSession';
 import { useTheme } from '../context/ThemeContext';
