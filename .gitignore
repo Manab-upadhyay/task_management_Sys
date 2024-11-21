@@ -4,9 +4,7 @@
 /node_modules/
 
 # Ignore files with sensitive data
-src/app/api/auth/[...nextauth].ts
-src/app/api/auth/[...nextauth]/route.ts
-src/task-management-77408-firebase-adminsdk-4u7i2-8dc38cef6b.json
+
 
 # Ignore testing files
 /coverage
