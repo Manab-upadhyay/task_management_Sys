@@ -6,7 +6,7 @@ import { collection,addDoc, Timestamp, getDocs, deleteDoc, doc } from "firebase/
 
 
 
-const serviceAccount = require("../../../task-management-77408-firebase-adminsdk-4u7i2-8dc38cef6b.json");
+const serviceAccount = require("../../../../task-management-77408-firebase-adminsdk-4u7i2-40bb455e36.json");
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -18,7 +18,7 @@ if (!admin.apps.length) {
 export async function POST(req: NextRequest) {
   const { token, title, message, link, userid } = await req.json();
 
-    
+    console.log(token)
    
   const payload: Message = {
     token: token,

@@ -16,6 +16,7 @@ import { TimeProvider } from "./context/timepicker";
 import { DateProvider } from "./context/date";
 import { toast, ToastContainer } from 'react-toastify';
 
+
 import 'react-toastify/dist/ReactToastify.css';
 import { useFCM } from "./hooks/useFmc";
 
@@ -37,7 +38,7 @@ export default function RootLayout({
       <body>
         <ThemeProvider>
      <SessionWrapper>
-     <ToastContainer/>
+ 
     
       <DateProvider>
    <TimeProvider>
