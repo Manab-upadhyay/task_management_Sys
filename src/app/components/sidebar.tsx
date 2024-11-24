@@ -8,11 +8,14 @@ import { useDropdownToggler } from "../hooks/toggleDropdown";
 import { ModeToggle } from "../hooks/Theme";
 import { useModal } from "../context/LoginModel";
 import UserProfile from "./userprofile";
-import { useSessionData } from "../hooks/useSession";
+import { useSessionData,signOut } from "../hooks/useSession";
 import { useTheme } from "../context/ThemeContext";
 import Link from "next/link";
 import { Component } from "../hooks/componentClick";
 import { NotificationHandler } from "../hooks/notificationHandldler";
+import { CiLogout } from "react-icons/ci";
+
+
 
 const Sidebar: React.FC = () => {
   const { show, toggleNotification } = useDropdownToggler();
@@ -20,6 +23,7 @@ const Sidebar: React.FC = () => {
   const { component, OnChoose } = Component();
   const { fetchNotifications } = NotificationHandler();
   const [isOpen, setIsOpen] = useState(false);
+  const {session}= useSessionData()
 
   useEffect(() => {
     fetchNotifications();
@@ -82,7 +86,7 @@ const Sidebar: React.FC = () => {
             </div>
           </div>
 
-          <UserProfile />
+        
 
           {/* Sidebar Links */}
           <ul className="space-y-2 font-medium mt-5">
@@ -104,8 +108,14 @@ const Sidebar: React.FC = () => {
               </li>
             ))}
           </ul>
+          <div className="mt-96 text-white cursor-pointer">
+          {session&&<CiLogout   onClick={() => signOut({ callbackUrl: "https://localhost:3000" })}  className="ml-40"/>}
+          <UserProfile  />
+          </div>
         </div>
+
       </aside>
+  
 
       
       {isOpen && (

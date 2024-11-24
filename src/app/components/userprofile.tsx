@@ -45,7 +45,7 @@ export default function UserProfile() {
         </>
       ) : (
         <div className="text-center mt-4 font-poppins">
-          <p className="text-gray-700 dark:text-gray-300 mb-2 text-lg font-semibold">
+          <p className={`text-gray-700 ${theme === 'dark' ? 'text-white' : 'text-black'}  mb-2 text-lg font-semibold`}>
             You are not logged in.
           </p>
           </div>
