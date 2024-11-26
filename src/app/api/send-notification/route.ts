@@ -1,8 +1,9 @@
 import admin from "firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
 import { Message } from "firebase-admin/messaging";
-import db from "../../firebase/firebase"
+import {db,realtimeDb,ref,serverTimestamp,set,get,child,remove} from "../../firebase/firebase"
 import { collection,addDoc, Timestamp, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { notification } from "@/app/models/notification";
 
 
 
@@ -38,13 +39,14 @@ export async function POST(req: NextRequest) {
 
   try {
     await admin.messaging().send(payload);
-   const data= await addDoc(collection(db, "notification"), {
-        title: title,
-        message: message,
-        userid: userid,
-        timestamp: Timestamp.now()  // Optional: add timestamp
-      });
-      console.log(data)
+    const notificationRef = ref(realtimeDb, `notifications/${userid}/${Date.now()}`);
+    await set(notificationRef, {
+      title,
+      message,
+      userid,
+      timestamp: serverTimestamp(), // Use Firebase server timestamp
+    });
+   console.log(notificationRef)
     return NextResponse.json({ text: "Sent successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error sending notification:", error);
@@ -55,32 +57,43 @@ export async function POST(req: NextRequest) {
 
 export async function GET() {
   try {
-    const docRef = collection(db, "notification"); 
-    const snapshot = await getDocs(docRef); 
-    
-   
-    const notifications = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const dbRef = ref(realtimeDb); // Reference to the root of the database
+    const snapshot = await get(child(dbRef, "notifications")); // Fetch data under the "notifications" node
+
+    if (!snapshot.exists()) {
+      return NextResponse.json({ notifications: [] }, { status: 200 });
+    }
 
     
+    const notifications:any = [];
+    snapshot.forEach((userSnapshot) => {
+      userSnapshot.forEach((notificationSnapshot) => {
+        notifications.push({
+          id: notificationSnapshot.key, // Use unique key as ID
+          ...notificationSnapshot.val(),
+        });
+      });
+    });
+
     return NextResponse.json({ notifications }, { status: 200 });
   } catch (error) {
     console.error("Error fetching notifications:", error);
-    return NextResponse.json({ error: "Failed to fetch notifications" }, { status: 500 });
+    return NextResponse.json(
+      { error: "Failed to fetch notifications" },
+      { status: 500 }
+    );
   }
 }
 export async function DELETE(req:NextRequest){
   try {
  const body= await req.json()
- console.log("body is",body)
+
  
- const taskDoc = doc(db, "notification", body.id);
-     const Doc= await deleteDoc(taskDoc)
+ const notificationRef = ref(realtimeDb, `notifications/${body.userId}/${body.id}`); // Reference to the specific notification
+ const doc=await remove(notificationRef); 
 
   
-      return NextResponse.json({message:"notification deleted",Doc},{status:200})
+      return NextResponse.json({message:"notification deleted",doc},{status:200})
       
   } catch (error) {
       console.error("Error deleting task:", error);

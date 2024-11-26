@@ -1,31 +1,52 @@
 import { useEffect, useState } from "react";
 import { useSessionData } from "./useSession";
-import { fetchData } from "next-auth/client/_utils";
+import { AnyRecord } from "dns";
 
- function NotificationHandler() {
+function NotificationHandler() {
   const [notifications, setNotifications] = useState([]);
-const {session}= useSessionData()
+  const [notificationCount, setNotificationCount] = useState(0);
+  const { session } = useSessionData();
 
-  
-useEffect(()=>{
-  fetchNotifications()
-},[])
-    async function fetchNotifications() {
-      try {
-        const response = await fetch("https://localhost:3000/api/send-notification");
-        if (response.ok) {
-          const data = await response.json();
-          setNotifications(data.notifications.filter((noti:any)=>noti.userid==session?.user?.email)); // Assuming your API returns an array of notifications
-        } else {
-          console.error("Error fetching notifications");
+  useEffect(() => {
+    fetchNotifications();
+
+    // Polling for new notifications every 30 seconds
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 30000);
+
+    return () => clearInterval(interval); // Clean up interval on unmount
+  }, []);
+
+  async function fetchNotifications() {
+    try {
+      setNotificationCount(0);
+      const response = await fetch("https://localhost:3000/api/send-notification");
+      if (response.ok) {
+        const data = await response.json();
+        const userNotifications = data.notifications.filter(
+          (noti:any) => noti.userid === session?.user?.email
+        );
+        
+ 
+        if (userNotifications.length > notifications.length) {
+          setNotificationCount((prevCount) => prevCount + (userNotifications.length - notifications.length));
         }
-      } catch (error) {
-        console.error("Error fetching notifications:", error);
+        
+       
+        setNotifications(userNotifications);
+      } else {
+        console.error("Error fetching notifications");
       }
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
     }
+  }
 
-    // Fetch notifications once on component mount
-   
+  const handleViewNotifications = () => {
+    // Reset notification count to 0 when notifications are viewed
+  
+  };
 
   const handleDelete = async (id:any) => {
     try {
@@ -51,4 +72,6 @@ useEffect(()=>{
   };
   return {notifications,handleDelete, fetchNotifications}
 }
-export {NotificationHandler}
+
+
+export { NotificationHandler };

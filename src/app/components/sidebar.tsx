@@ -20,13 +20,20 @@ import { CiLogout } from "react-icons/ci";
 const Sidebar: React.FC = () => {
   const { show, toggleNotification } = useDropdownToggler();
   const { theme } = useTheme();
-  const { component, OnChoose } = Component();
+
   const { fetchNotifications } = NotificationHandler();
   const [isOpen, setIsOpen] = useState(false);
   const {session}= useSessionData()
 
   useEffect(() => {
     fetchNotifications();
+
+    // Polling for new notifications every 30 seconds
+    const interval = setInterval(() => {
+      fetchNotifications();
+    }, 60000);
+
+    return () => clearInterval(interval); // Clean up interval on unmount
   }, []);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
