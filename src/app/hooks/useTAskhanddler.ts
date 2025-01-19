@@ -8,6 +8,7 @@ import { FaTasks } from "react-icons/fa";
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTaskStore } from "../zunstand/taskstore";
+import { truncate } from "fs";
 const useManageTask=()=>{
   interface Task {
     id: number;
@@ -28,6 +29,7 @@ const useManageTask=()=>{
     const [showModal, setShowModal] = useState(false);
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [loading, setloading]= useState(false)
+  const [pending,setpending]= useState(false)
     const handleEditClick = (task:any) => {
         setEditTaskId(task.id);
         setEditedTask({ title: task.title, description: task.description, time: task.time, date: task.date, completed: task.completed });
@@ -58,7 +60,18 @@ const useManageTask=()=>{
       setTaskToDelete(task);
       setShowModal(true);
     };
-  
+    const Pending = (time: any) => {
+     
+      const givenTime = new Date(time).getTime();
+    console.log("time",givenTime)
+      
+      if (givenTime < Date.now()) {
+      setpending(true);
+      } else {
+        setpending(false);
+      }
+    };
+    
     const confirmDelete = () => {
       if (taskToDelete) {
         deleteTask(taskToDelete.id);
@@ -138,6 +151,6 @@ const useManageTask=()=>{
           console.error("Error updating task:", error);
         }
       };
-      return {taskdata, handleEdit, show, showModal, loading,  setShowModal,handleDeleteClick, confirmDelete, setdropdownid,showDropdown,dropdownid,deleteTask, handleCheckboxChange, handleSaveClick, getdata,handleEditClick,handleInputChange, selectedDate, selectedTime, editTaskId, editedTask}
+      return {taskdata, handleEdit, pending, Pending, show, showModal, loading,  setShowModal,handleDeleteClick, confirmDelete, setdropdownid,showDropdown,dropdownid,deleteTask, handleCheckboxChange, handleSaveClick, getdata,handleEditClick,handleInputChange, selectedDate, selectedTime, editTaskId, editedTask}
 }
 export {useManageTask}

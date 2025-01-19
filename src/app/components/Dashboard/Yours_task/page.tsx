@@ -15,6 +15,8 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { CSSProperties } from 'react';
 import { Router } from 'next/router';
 import Link from 'next/link';
+import { task } from '@/app/models/task';
+import { AnyAaaaRecord } from 'dns';
 const override: CSSProperties = {
   display: "block",
   margin: "0 auto",
@@ -23,6 +25,7 @@ const override: CSSProperties = {
 
 export default function List() {
   const [filterdata, setfilterdata] = useState<any[]>([]);
+  const [pending, setpending]= useState([])
   const {
     handleCheckboxChange,
     handleEditClick,
@@ -52,8 +55,19 @@ export default function List() {
   }, [session]);
  
    useEffect(() => {
+    const now= Date.now()
+    const pendinglist:any=[]
+   taskdata.forEach((task:any) => {
+    const taskDateTime = new Date(`${task.date} ${task.time}`).getTime();
+    if(taskDateTime<now)
+      pendinglist[task.id]=true
+    setpending(pendinglist)
+
+   });
+
     const data = taskdata.filter((task: any) => task.completed === false);
     setfilterdata(data);
+    
   }, [taskdata]); 
  
   return (
@@ -196,6 +210,7 @@ export default function List() {
                 <h3 className="text-xl font-semibold mb-2 flex items-center">
                   <GoDotFill className="text-orange-500 mr-2" />
                   {task.title}
+                 
                 </h3>
                 <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
   {task.description}
@@ -207,9 +222,17 @@ export default function List() {
 </div>
 <div className="flex items-center gap-2 mt-2 text-sm text-purple-600 dark:text-purple-300 bg-purple-100 dark:bg-slate-700 rounded-lg px-2 py-1 shadow-inner">
               <CiClock2 className="text-lg" />
-              <p>{task.time}</p>
+              <p>{task.time}
+              
+              </p>
+              {pending[task.id] && (
+  <span className="ml-32 px-3 py-1 text-sm font-semibold text-yellow-800 bg-yellow-100 rounded-full shadow-sm dark:text-yellow-300 dark:bg-yellow-800">
+    Pending
+  </span>
+)}
+
             </div>
-          
+         
               </>
             )}
           </div>
@@ -226,6 +249,7 @@ export default function List() {
     />
   }
 
+   
       {/* Modal for Delete Confirmation */}
       {showModal && (
         <DialogBox handdleclick={() => setShowModal(false)} confirmDelete={confirmDelete} />
