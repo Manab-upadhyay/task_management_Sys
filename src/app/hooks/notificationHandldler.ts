@@ -7,32 +7,19 @@ function NotificationHandler() {
   const [notificationCount, setNotificationCount] = useState(0);
   const { session } = useSessionData();
 
-  useEffect(() => {
-    fetchNotifications();
 
-    // Polling for new notifications every 30 seconds
-    const interval = setInterval(() => {
-      fetchNotifications();
-    }, 30000);
-
-    return () => clearInterval(interval); // Clean up interval on unmount
-  }, []);
 
   async function fetchNotifications() {
     try {
-      setNotificationCount(0);
+ 
       const response = await fetch("https://localhost:3000/api/send-notification");
       if (response.ok) {
         const data = await response.json();
         const userNotifications = data.notifications.filter(
-          (noti:any) => noti.userid === session?.user?.email
+          (noti:any) => noti.userid == session?.user?.email
         );
         
- 
-        if (userNotifications.length > notifications.length) {
-          setNotificationCount((prevCount) => prevCount + (userNotifications.length - notifications.length));
-        }
-        
+        console.log("notifi",userNotifications)
        
         setNotifications(userNotifications);
       } else {
@@ -43,10 +30,7 @@ function NotificationHandler() {
     }
   }
 
-  const handleViewNotifications = () => {
-    // Reset notification count to 0 when notifications are viewed
   
-  };
 
   const handleDelete = async (id:any) => {
     try {
@@ -70,7 +54,7 @@ function NotificationHandler() {
       console.error("Error deleting notification:", error);
     }
   };
-  return {notifications,handleDelete, fetchNotifications}
+  return {notifications,handleDelete, fetchNotifications,notificationCount}
 }
 
 

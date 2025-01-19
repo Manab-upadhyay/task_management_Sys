@@ -7,7 +7,7 @@ import { useEffect } from "react";
 
 export default function Notifications() {
   const { theme } = useTheme();
-  const { notifications, handleDelete } = NotificationHandler();
+  const { notifications, handleDelete,fetchNotifications } = NotificationHandler();
 
   const formatTimestamp = (timestamp: { seconds: number; nanoseconds: number }) => {
     const milliseconds = timestamp.seconds * 1000 + timestamp.nanoseconds / 1e6;
@@ -15,10 +15,17 @@ export default function Notifications() {
     return date.toLocaleString(); // Format the date to a readable format
   };
   console.log("noti", notifications)
+  useEffect(()=>{
+    fetchNotifications()
+  },[])
 
   return (
-    <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-xl rounded-lg p-6 w-96 z-10`}>
-      <h3 className="text-xl font-semibold text-white mb-4 border-b pb-2">
+    <div className={`${theme === 'dark' ? 'bg-gray-800' : 'bg-white'} shadow-xl rounded-lg p-6 w-60 absolute`}>
+     <h3
+  className={`${
+    theme === "dark" ? "text-white" : "text-black"
+  } text-xl font-semibold mb-4 border-b pb-2`}
+>
         Notifications
       </h3>
       <div className="h-72 overflow-y-auto space-y-4"> 

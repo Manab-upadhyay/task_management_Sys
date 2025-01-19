@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import db from "../../firebase/firebase"
+import {db} from "../../firebase/firebase"
 import { task } from "src/app/models/task"
 import { promises } from "fs"
 import { addDoc, collection, getDoc,getDocs,doc, deleteDoc, setDoc } from "firebase/firestore"

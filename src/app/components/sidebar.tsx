@@ -76,22 +76,26 @@ const Sidebar: React.FC = () => {
           }`}
         >
           {/* Header Section */}
-          <div className="flex justify-between items-center mb-4">
-            <Loginbutton />
-            <div className="relative">
-              <IoIosNotificationsOutline
-                onClick={toggleNotification}
-                className={`cursor-pointer text-2xl ${
-                  theme === "dark" ? "text-white" : "text-black"
-                }`}
-              />
-              {show && (
-                <div className="absolute right-0 top-8 w-48 bg-white border rounded shadow-lg dark:bg-orange-900 hover:bg-orange-100 dark:hover:bg-orange-700">
-                  <Notifications />
-                </div>
-              )}
-            </div>
-          </div>
+          <div className="flex justify-between items-center mb-4 relative z-20">
+  <Loginbutton />
+  <div className="relative">
+    {/* Notification Icon */}
+    <IoIosNotificationsOutline
+      onClick={toggleNotification}
+      className={`cursor-pointer text-2xl ${
+        theme === "dark" ? "text-white" : "text-black"
+      }`}
+    />
+    {show && (
+      <div
+       
+      >
+        {/* Notification Content */}
+        <Notifications />
+      </div>
+    )}
+  </div>
+</div>
 
         
 
@@ -115,7 +119,8 @@ const Sidebar: React.FC = () => {
               </li>
             ))}
           </ul>
-          <div className="mt-96 text-white cursor-pointer">
+          <div className={`${theme === 'dark' ? 'text-white' : 'text-black'} mt-96 cursor-pointer`}>
+
           {session&&<CiLogout   onClick={() => signOut({ callbackUrl: "https://localhost:3000" })}  className="ml-40"/>}
           <UserProfile  />
           </div>
