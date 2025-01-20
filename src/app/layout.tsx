@@ -15,6 +15,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import { TimeProvider } from "./context/timepicker";
 import { DateProvider } from "./context/date";
 import { toast, ToastContainer } from 'react-toastify';
+import { TeamProvider } from "./context/teamContext";
 
 
 import 'react-toastify/dist/ReactToastify.css';
@@ -36,6 +37,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <TeamProvider>
         <ThemeProvider>
      <SessionWrapper>
  
@@ -56,6 +58,7 @@ export default function RootLayout({
         </DateProvider>
         </SessionWrapper>
         </ThemeProvider>
+        </TeamProvider>
       </body>
     </html>
   );

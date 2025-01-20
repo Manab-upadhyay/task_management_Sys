@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { ModeToggle } from '../hooks/Theme';
 import { useTheme } from '../context/ThemeContext';
 import { CiCalendarDate } from "react-icons/ci";
@@ -11,6 +11,8 @@ import { useListHandler } from '../hooks/listhanddler';
 import { useTimePicker } from '../hooks/usetimepicker';
 import { useSessionData } from '../hooks/useSession';
 import Link from 'next/link';
+import { db } from '../firebase/firebase';
+import { collection,getDocs } from 'firebase/firestore';
 
 
 
@@ -18,7 +20,7 @@ export default function InputBox() {
   const { theme } = useTheme();
    const {triggerfetch}= useListHandler()
    const {session}= useSessionData()
-  
+  const [teamCreated, setteamcreated]= useState(false)
 
   
   const {onTitleChange, 
@@ -32,6 +34,22 @@ export default function InputBox() {
       await onAddTask(); // Call the existing onAddTask function
         triggerfetch(); // Trigger fetching the updated task list
   };
+  useEffect(() => {
+    async function checkTeam() {
+      try {
+        const docRef = await getDocs(collection(db, "teams"));
+        const isAdmin = docRef.docs.some((team) => team.data().admin === session?.user?.email);
+        if (isAdmin) setteamcreated(true);
+        
+      } catch (error) {
+        console.log(error)
+        
+      }
+    
+    }
+    checkTeam();
+  }, [session]);
+  
 
   return (
     <div className="flex flex-col items-center justify-center w-2/4 h-3/4">
@@ -79,6 +97,13 @@ export default function InputBox() {
         {session&&<button onClick={handleAddTask} className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
         Add task
         </button>}
+        {teamCreated && (
+  <button
+    className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all"
+  >
+    Assign Task@
+  </button>
+)}
 
       </div>
     </div>
