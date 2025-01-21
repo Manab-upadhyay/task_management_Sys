@@ -1,20 +1,18 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
+import { useSessionData } from "../hooks/useSession";
 
-const TeamContext = createContext<any>(null);
-interface Session {
-    user?: {
-      email?: string;
-    };
-  }
+
 interface Team{
-    session:Session
+   
     children:React.ReactNode
 }
-
-export const TeamProvider = ({ children, session }:Team) => {
+const TeamContext = createContext<any>(null);
+export const TeamProvider = ({ children }:Team) => {
+  
   const [teamCreated, setTeamCreated] = useState(false);
+  const {session}= useSessionData()
 
   async function checkTeam() {
     try {
@@ -38,5 +36,11 @@ export const TeamProvider = ({ children, session }:Team) => {
     </TeamContext.Provider>
   );
 };
+export const useTeam = () => {
+  const context = useContext(TeamContext);
+  if (!context) {
+    throw new Error("useTeam must be used within a ThemeProvider");
+  }
+  return context;
+};
 
-export const useTeam = () => useContext(TeamContext);

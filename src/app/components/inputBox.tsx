@@ -11,8 +11,8 @@ import { useListHandler } from '../hooks/listhanddler';
 import { useTimePicker } from '../hooks/usetimepicker';
 import { useSessionData } from '../hooks/useSession';
 import Link from 'next/link';
-import { db } from '../firebase/firebase';
-import { collection,getDocs } from 'firebase/firestore';
+import { useTeam } from '../context/teamContext';
+
 
 
 
@@ -20,7 +20,8 @@ export default function InputBox() {
   const { theme } = useTheme();
    const {triggerfetch}= useListHandler()
    const {session}= useSessionData()
-  const [teamCreated, setteamcreated]= useState(false)
+
+  const {teamCreated}= useTeam()
 
   
   const {onTitleChange, 
@@ -34,21 +35,7 @@ export default function InputBox() {
       await onAddTask(); // Call the existing onAddTask function
         triggerfetch(); // Trigger fetching the updated task list
   };
-  useEffect(() => {
-    async function checkTeam() {
-      try {
-        const docRef = await getDocs(collection(db, "teams"));
-        const isAdmin = docRef.docs.some((team) => team.data().admin === session?.user?.email);
-        if (isAdmin) setteamcreated(true);
-        
-      } catch (error) {
-        console.log(error)
-        
-      }
-    
-    }
-    checkTeam();
-  }, [session]);
+
   
 
   return (
@@ -109,3 +96,4 @@ export default function InputBox() {
     </div>
   );
 }
+

@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 import Loginbutton from "../buttons/loginButton";
 import { IoIosNotificationsOutline } from "react-icons/io";
-import { dashboard } from "../utils/sidebarutill";
+import { useDashboard } from "../utils/sidebarutill";
 import Notifications from "./Notification";
 import { useDropdownToggler } from "../hooks/toggleDropdown";
 import { ModeToggle } from "../hooks/Theme";
@@ -20,6 +20,7 @@ import { CiLogout } from "react-icons/ci";
 const Sidebar: React.FC = () => {
   const { show, toggleNotification } = useDropdownToggler();
   const { theme } = useTheme();
+  const dashboard= useDashboard()
 
   const { fetchNotifications } = NotificationHandler();
   const [isOpen, setIsOpen] = useState(false);

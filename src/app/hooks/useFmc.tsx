@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { getToken, onMessage } from "firebase/messaging";
-import { messaging } from "../firebase/notification";  // Your Firebase messaging initialization
+import { messaging } from "../firebase/firebase";  // Your Firebase messaging initialization
 import { toast } from "react-toastify";  // Importing react-toastify
 
 

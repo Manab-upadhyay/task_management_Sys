@@ -37,11 +37,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <TeamProvider>
+       
         <ThemeProvider>
      <SessionWrapper>
  
-    
+     <TeamProvider>
       <DateProvider>
    <TimeProvider>
         <ModalProvider>
@@ -56,9 +56,10 @@ export default function RootLayout({
         </ModalProvider>
         </TimeProvider>
         </DateProvider>
+        </TeamProvider>
         </SessionWrapper>
         </ThemeProvider>
-        </TeamProvider>
+       
       </body>
     </html>
   );

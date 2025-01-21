@@ -1,14 +1,19 @@
-import UseCreateTeam from "../../../hooks/usecreateTeam";
+"use client"
+import { useCreateTeam } from "@/app/hooks/usecreateTeam";
 
 export default function CreateTeam() {
-  const { team, handleInputChange, addMember, saveTeam,handdleTeamName } = UseCreateTeam();
+  const { team, handleInputChange, addMember, saveTeam,handdleTeamName } = useCreateTeam();
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-20 z-50">
+   
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-        <input   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-        onChange={(e)=>handdleTeamName(e)}
-        >Enter Team Name</input>
+      <h4 className="text-red-600 font-serif">Create Your Team </h4>
+      <input
+  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+  onChange={(e) => handdleTeamName(e)}
+  placeholder="Enter Team Name"
+/>
         {team.map((member, index) => (
           <div key={index} className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
