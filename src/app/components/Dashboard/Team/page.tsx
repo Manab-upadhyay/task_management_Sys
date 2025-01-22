@@ -3,15 +3,17 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { useEffect } from "react";
 import { useCreateTeam } from "../../../hooks/usecreateTeam";
 import AddMembers from "@/app/models/addMembers";
+import { DialogBox } from "@/app/models/dialog";
 
 export default function DisplayTeam() {
-  const { teamdata, getTeam, DeleteMembers, showModel, model } = useCreateTeam();
+  const { teamdata, getTeam, DeleteMembers, showModel, model,showDelModel,showDeleteModel,handledelete } = useCreateTeam();
   
 
   useEffect(() => {
     getTeam();
    
   }, [getTeam]);
+
 
   return (
     <section className="bg-white">
@@ -24,7 +26,7 @@ export default function DisplayTeam() {
             {teamdata[0]?.teamName}
           </h3>
           {/* Add Members Button */}
-          {teamdata[0]?.members.length <= 4 && (
+          {teamdata[0]?.members.length <4 && (
             <div>
               <button
                 onClick={showModel}
@@ -39,14 +41,14 @@ export default function DisplayTeam() {
 
         {/* Display Team Members */}
         {teamdata[0]?.members.length > 0 ? (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 h-40">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 h-36 ml-2">
             {teamdata[0]?.members.map((member: any, index: any) => (
               <div
                 key={index}
                 className="relative flex items-center space-x-4 bg-gray-50 rounded-lg shadow-md p-4 dark:bg-gray-800"
               >
                 <AiOutlineDelete
-                  onClick={() => DeleteMembers(member.email)}
+                  onClick={()=>handledelete(member.email)}
                   className="absolute top-4 right-4 text-red-500 cursor-pointer"
                 />
                 <img
@@ -84,6 +86,12 @@ export default function DisplayTeam() {
       {/* Modal for Adding Members */}
       {model && (
         <AddMembers handdleClose={showModel} />
+      )}
+      {showDeleteModel&&(
+          <DialogBox handdleclick={showDelModel} confirmDelete={DeleteMembers} >
+          <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+ <p className="mb-4 text-white">Are you sure you want to delete the Member?</p>
+</DialogBox>
       )}
         
            

@@ -24,6 +24,8 @@ export function useCreateTeam() {
   const [teamdata, setteamdata]= useState<FirestoreTeam[]>([])
   const [error,setError]= useState<string|null>(null);
   const[model,setShowModel]= useState(false)
+  const [showDeleteModel,setShowDeleteModel]= useState(false)
+  const[email,setEmail]=useState<string|null>(null)
   const router= useRouter()
 
   function handleInputChange(index:number, field:keyof TeamMember, value:string) {
@@ -71,17 +73,25 @@ setError(null)
    
   
   }
+  function showDelModel(){
+    setShowDeleteModel(!showDeleteModel)
+   
+  }
+  function handledelete(email:string){
+    setEmail(email)
+    setShowDeleteModel(true)
+  }
   
  
  async function saveTeam() {
-  // Check if all new team members have both name and email
+  setShowModel(false)
   if (team.some((member) => !member.name || !member.email)) {
     setError("All team members must have both name and email.");
     return;
   }
 
   try {
-    // Query the existing team
+   
     const teamQuery = query(
       collection(db, "teams"),
       where("admin", "==", session?.user?.email)
@@ -89,28 +99,30 @@ setError(null)
     const docRef = await getDocs(teamQuery);
 
     if (!docRef.empty) {
-      // Update the existing team
+     
       const teamDocId = docRef.docs[0].id;
       const existingTeam = docRef.docs[0].data() as FirestoreTeam;
 
-      // Ensure the total number of members does not exceed the limit
+     
       if (existingTeam.members.length + team.length > 5) {
         setError("Cannot add more than 5 members.");
         return;
       }
 
-      setError(null); // Clear error if all checks pass
+      setError(null); 
 
-      // Combine existing and new members
+    
       const updatedMembers = [...existingTeam.members, ...team];
 
-      // Update the team in Firestore
+     
       await updateDoc(doc(db, "teams", teamDocId), { members: updatedMembers });
 
-      // Update local state
-      setTeam([{ name: "", email: "" }]); // Reset new member input
+      
+      setTeam([{ name: "", email: "" }]);
       await getTeam(); // Refresh team data
       toast.success("Team updated successfully");
+      
+      
     } else {
       // No existing team, so create a new one
       const newTeam = {
@@ -125,10 +137,11 @@ setError(null)
 
       setTeamname(""); // Reset team name
       setTeam([{ name: "", email: "" }]); // Reset new member input
-      await getTeam(); // Refresh team data
+       // Refresh team data
+      setShowModel(false)
       toast.success("Team created successfully");
     }
-
+    setShowModel(false)
     router.push('/');
   } catch (error) {
     console.error("Error saving team:", error);
@@ -155,32 +168,36 @@ setError(null)
       console.error("Error fetching team data:", error);
     }
   }
-  async function DeleteMembers(email: string) {
+  async function DeleteMembers() {
     try {
       // Filter out the member with the matching email
+      console.log("called del")
       const updatedMembers = teamdata[0]?.members.filter((mem) => mem.email !== email);
   
-      // Update the team in Firestore
+      
       const teamDocRef = collection(db, "teams"); // Adjust to your Firestore structure
       const teamQuery = query(teamDocRef, where("teamName", "==", teamdata[0]?.teamName));
       const teamDocs = await getDocs(teamQuery);
   
       if (!teamDocs.empty) {
-        const teamDocId = teamDocs.docs[0].id; // Assuming the first document is the correct one
+        const teamDocId = teamDocs.docs[0].id; 
         await updateDoc(doc(db, "teams", teamDocId), { members: updatedMembers });
         
-        // Update local state
+      
         const updatedTeamData = { ...teamdata[0], members: updatedMembers };
         setteamdata([updatedTeamData]);
   
         console.log("Member deleted successfully");
+        
       } else {
         console.error("Team document not found");
       }
+      setEmail(null)
+        setShowDeleteModel(false)
     } catch (error) {
       console.error("Error deleting member:", error);
     }
   }
   
-  return { team, handleInputChange, addMember, saveTeam,handdleTeamName,teamdata,getTeam,DeleteMembers,showModel,model,error };
+  return { team, handleInputChange, addMember, saveTeam,handdleTeamName,teamdata,getTeam,DeleteMembers,showModel,model,error,showDelModel,showDeleteModel,handledelete };
 }

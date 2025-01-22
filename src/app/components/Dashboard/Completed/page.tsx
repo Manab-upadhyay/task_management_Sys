@@ -100,7 +100,10 @@ useEffect(()=>{
         ))}
       </div>
       {showModal && (
-        <DialogBox handdleclick={() => setShowModal(false)} confirmDelete={confirmDelete} />
+        <DialogBox handdleclick={() => setShowModal(false)} confirmDelete={confirmDelete} >
+           <h2 className="text-xl font-bold mb-4">Confirm Deletion</h2>
+  <p className="mb-4 text-white">Are you sure you want to delete this task?</p>
+</DialogBox>
 
 
       )}
