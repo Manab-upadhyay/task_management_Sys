@@ -1,20 +1,24 @@
 "use client"
 import { useCreateTeam } from "@/app/hooks/usecreateTeam";
+interface DialogBoxProps {
+    handdleClose: () => void;
+   
+  }
+export default function AddMembers({handdleClose}:DialogBoxProps) {
+  const { team, handleInputChange, addMember, saveTeam,error,showModel } = useCreateTeam();
 
-export default function CreateTeam() {
-  const { team, handleInputChange, addMember, saveTeam,handdleTeamName,error } = useCreateTeam();
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-20 z-50">
+    <div className="fixed inset-0 flex items-center justify-center bg-white bg-opacity-50 z-50">
    
       <div className="bg-white p-6 rounded-lg shadow-lg w-96">
-      <h4 className="text-red-600 font-serif">Create Your Team </h4>
-      <input
-  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
-  onChange={(e) => handdleTeamName(e)}
-  placeholder="Enter Team Name"
-/>
-        {error?<div>{error}</div>:team.map((member, index) => (
+      <h4 className="text-red-600 font-serif">Add Memebers To The  Team </h4>
+      {error && (
+          <div className="mb-4 p-2 bg-red-100 text-red-700 border border-red-300 rounded">
+            {error}
+          </div>
+        )}
+       {team.map((member, index) => (
           <div key={index} className="mb-4">
             <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Email
@@ -51,6 +55,12 @@ export default function CreateTeam() {
           >
             Done
           </button>
+          <button
+              onClick={handdleClose} // Assuming `showModel` also toggles `model` off
+              className="mt-4 bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600"
+            >
+                Close
+                </button>
         </div>
       </div>
     </div>

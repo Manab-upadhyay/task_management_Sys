@@ -22,6 +22,8 @@ export function useCreateTeam() {
   const [teamName, setTeamname]=useState<any>(null)
   const {session}= useSessionData()
   const [teamdata, setteamdata]= useState<FirestoreTeam[]>([])
+  const [error,setError]= useState<string|null>(null);
+  const[model,setShowModel]= useState(false)
   const router= useRouter()
 
   function handleInputChange(index:number, field:keyof TeamMember, value:string) {
@@ -32,32 +34,106 @@ export function useCreateTeam() {
 function handdleTeamName(e:any){
 setTeamname(e.target.value)
 }
-  function addMember() {
+   async function addMember() {
+    try {
+   
+      const teamQuery = query(collection(db, "teams"), where("admin", "==", session?.user?.email));
+      
+      
+      const docRef = await getDocs(teamQuery);
+  
+      if (!docRef.empty) {
+      
+        const teamData = docRef.docs.map((doc) => doc.data() as FirestoreTeam);
+        
+        
+        setteamdata(teamData);
+      } else {
+        console.log("No team found for this user.");
+      }
+    } catch (error) {
+      console.error("Error fetching team data:", error);
+    }
+    if(teamdata[0]?.members.length+team.length>=4){
+      setError("Team Size limit exceded")
+      return;
+    }
+setError(null)
     setTeam([...team, { name: "", email: "" }]);
+
+  }
+ 
+  
+  async function showModel() {
+    await getTeam()
+    setShowModel(!model)
+    console.log(teamdata[0]?.members.length)
+   
+  
+  }
+  
+ 
+ async function saveTeam() {
+  // Check if all new team members have both name and email
+  if (team.some((member) => !member.name || !member.email)) {
+    setError("All team members must have both name and email.");
+    return;
   }
 
- 
-  async function saveTeam() {
-    try {
-      const teamDoc = {
+  try {
+    // Query the existing team
+    const teamQuery = query(
+      collection(db, "teams"),
+      where("admin", "==", session?.user?.email)
+    );
+    const docRef = await getDocs(teamQuery);
+
+    if (!docRef.empty) {
+      // Update the existing team
+      const teamDocId = docRef.docs[0].id;
+      const existingTeam = docRef.docs[0].data() as FirestoreTeam;
+
+      // Ensure the total number of members does not exceed the limit
+      if (existingTeam.members.length + team.length > 5) {
+        setError("Cannot add more than 5 members.");
+        return;
+      }
+
+      setError(null); // Clear error if all checks pass
+
+      // Combine existing and new members
+      const updatedMembers = [...existingTeam.members, ...team];
+
+      // Update the team in Firestore
+      await updateDoc(doc(db, "teams", teamDocId), { members: updatedMembers });
+
+      // Update local state
+      setTeam([{ name: "", email: "" }]); // Reset new member input
+      await getTeam(); // Refresh team data
+      toast.success("Team updated successfully");
+    } else {
+      // No existing team, so create a new one
+      const newTeam = {
         teamName,
-        admin:session?.user?.email,
+        admin: session?.user?.email,
         members: team,
-        createdAt: new Date()
+        createdAt: new Date(),
       };
 
-      const docRef = await addDoc(collection(db, "teams"), teamDoc);
-      console.log("Document written with ID: ", docRef.id);
-      setTeamname(""); // Reset teamName to an empty string
-    setTeam([{ name: "", email: "" }]); 
+      const newDocRef = await addDoc(collection(db, "teams"), newTeam);
+      console.log("New team created with ID:", newDocRef.id);
 
-      toast.success("Team Created Succesfully")
-      router.push('/')
-      
-    } catch (error) {
-      console.error("Error adding document: ", error);
+      setTeamname(""); // Reset team name
+      setTeam([{ name: "", email: "" }]); // Reset new member input
+      await getTeam(); // Refresh team data
+      toast.success("Team created successfully");
     }
+
+    router.push('/');
+  } catch (error) {
+    console.error("Error saving team:", error);
   }
+}
   async function getTeam() {
     try {
    
@@ -106,5 +182,5 @@ setTeamname(e.target.value)
     }
   }
   
-  return { team, handleInputChange, addMember, saveTeam,handdleTeamName,teamdata,getTeam,DeleteMembers };
+  return { team, handleInputChange, addMember, saveTeam,handdleTeamName,teamdata,getTeam,DeleteMembers,showModel,model,error };
 }
