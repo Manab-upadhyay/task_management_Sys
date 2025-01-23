@@ -12,6 +12,9 @@ import { useTimePicker } from '../hooks/usetimepicker';
 import { useSessionData } from '../hooks/useSession';
 import Link from 'next/link';
 import { useTeam } from '../context/teamContext';
+import AssignTask from '../models/asingTask';
+import { ImCross } from "react-icons/im";
+import { remove } from 'firebase/database';
 
 
 
@@ -28,7 +31,7 @@ export default function InputBox() {
     onAddTask, 
     title, 
     description, 
-    onDescriptionChange,error }= useTaskHandler()
+    onDescriptionChange,error,toggleModel,showAsingModel,handdleSelectMembers,member,addAssignedTask,removeAsing }= useTaskHandler()
 
 
     const handleAddTask = async () => {
@@ -81,18 +84,41 @@ export default function InputBox() {
         {!session&&<Link href={'/auth'}><button className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
         Add task
         </button></Link>}
-        {session&&<button onClick={handleAddTask} className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
+        {session&&<button  onClick={member?addAssignedTask:handleAddTask} className="mt-10 w-full bg-orange-600 text-white rounded-md shadow-md py-2 hover:bg-orange-500 transition duration-200">
         Add task
         </button>}
-        {teamCreated && (
-  <button
-    className="mt-10 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all"
+        <div className="mt-10 flex flex-col items-center">
+  {/* Assign Task Button */}
+  {teamCreated&&!member&&<button
+    className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition-all"
+    onClick={toggleModel}
   >
-    Assign Task@
-  </button>
-)}
+    Assign Task
+  </button>}
+
+  {/* Task Assigned Section */}
+  {member && (
+    <div className="mt-6 p-4 bg-gray-100 border border-gray-300 rounded-lg shadow-md w-full max-w-md text-center">
+       <ImCross onClick={removeAsing} />
+      <p className="text-gray-700 font-medium text-lg">
+        Task Assigned to: <span className="font-semibold text-blue-600">{member}</span>
+      </p>
+      <button
+        onClick={toggleModel}
+        className="mt-4 bg-orange-500 hover:bg-orange-600 text-white font-medium py-2 px-4 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50 transition-all"
+      >
+        Change Assigned
+      </button>
+     
+      
+    </div>
+  )}
+</div>
 
       </div>
+      {showAsingModel&&(
+<AssignTask confirmclose={toggleModel} handleClick={handdleSelectMembers}></AssignTask>
+      )}
     </div>
   );
 }
