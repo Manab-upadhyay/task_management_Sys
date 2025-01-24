@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { collection, query, where, getDocs } from "firebase/firestore";
+import { collection, query, where, getDocs,updateDoc,doc } from "firebase/firestore";
 import { useSessionData } from "./useSession";// Your Firestore initialization file
 import { db } from "../firebase/firebase";
 
@@ -26,6 +26,7 @@ interface FirestoreTeam {
 export  function useTeamTask() {
   const [teamTask, setTeamdata] = useState<FirestoreTeam[]>([]);
   const {session}= useSessionData()
+  const [updatedTasks, setUpdatedTasks] = useState(teamTask);
 
   const getTeamTask = async () => {
     try {
@@ -58,6 +59,47 @@ export  function useTeamTask() {
       console.error("Error fetching teams:", error);
     }
   };
+  async function deleteTask(email: string, tidx: number) {
+    try {
+      console.log("Task index to delete:", tidx);
+  
+      // Update tasks for the specific member
+      const updatedMembers = teamTask[0].members.map((member) => {
+        if (member.email === email) {
+          return {
+            ...member,
+            tasks: (member.tasks || []).filter((_, index) => index !== tidx), // Remove task at index tidx
+          };
+        }
+        return member; // Unchanged members
+      });
+  
+      console.log("Updated Members:", updatedMembers);
+  
+      // Firestore Query to get the document
+      const teamDocRef = collection(db, "teams");
+      const teamQuery = query(teamDocRef, where("teamName", "==", teamTask[0]?.teamName));
+      const teamDocs = await getDocs(teamQuery);
+  
+      if (!teamDocs.empty) {
+        const teamDocId = teamDocs.docs[0].id;
+  
+        // Update Firestore
+        await updateDoc(doc(db, "teams", teamDocId), { members: updatedMembers });
+  
+        // Update local state
+        const updatedTeamData = { ...teamTask[0], members: updatedMembers };
+        setTeamdata([updatedTeamData]);
+  
+        console.log("Task deleted successfully and state updated!");
+      } else {
+        console.error("Team document not found.");
+      }
+    } catch (error) {
+      console.error("Error deleting task:", error);
+    }
+  }
+  
 
-  return { teamTask, getTeamTask };
+  return { teamTask, getTeamTask,deleteTask };
 }
