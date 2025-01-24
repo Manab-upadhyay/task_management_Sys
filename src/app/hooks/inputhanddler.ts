@@ -153,6 +153,7 @@ setShowAsingModel(false)
         const newTask = {
           title,
           description,
+          email:member,
           date: formattedDate,
           time: formattedTime,
         };

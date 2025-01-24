@@ -47,7 +47,7 @@ export const useDashboard = () => {
     teamCreated && {
       icon: MdIncompleteCircle,
       name: "Team Task",
-      link: "/components/Dashboard/tTask",
+      link: "/components/Dashboard/TeamTask",
     },
   ].filter(Boolean); // Remove falsy values like `false` or `null`
 
