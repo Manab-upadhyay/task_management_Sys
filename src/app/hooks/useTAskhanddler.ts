@@ -9,6 +9,7 @@ import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useTaskStore } from "../zunstand/taskstore";
 import { truncate } from "fs";
+import { useUser,UserButton } from "@clerk/nextjs";
 const useManageTask=()=>{
   interface Task {
     id: number;
@@ -30,6 +31,7 @@ const useManageTask=()=>{
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [loading, setloading]= useState(false)
   const [pending,setpending]= useState(false)
+  const {user}= useUser()
     const handleEditClick = (task:any) => {
         setEditTaskId(task.id);
         setEditedTask({ title: task.title, description: task.description, time: task.time, date: task.date, completed: task.completed });
@@ -40,7 +42,7 @@ const useManageTask=()=>{
         setEditedTask((prev) => ({ ...prev, [name]: value }));
       };
     const getdata=async()=>{
-      if(session){
+      if(user){
         setloading(true)
         try {
             const data= await fetch('https://localhost:3000/api/Addtask') 

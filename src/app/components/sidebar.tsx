@@ -78,7 +78,7 @@ const Sidebar: React.FC = () => {
         >
           {/* Header Section */}
           <div className="flex justify-between items-center mb-4 relative z-20">
-  <Loginbutton />
+
   <div className="relative">
     {/* Notification Icon */}
     <IoIosNotificationsOutline

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useTaskStore } from "../zunstand/taskstore";
 import { useSessionData } from "./useSession";
 import { DialogBox } from "../models/dialog";
+import { useUser,UserButton } from "@clerk/nextjs";
 interface Task {
   id: number;
   title: string;
@@ -13,12 +14,13 @@ interface Task {
 const useListHandler = () => {
   const { taskdata, setTaskData, } = useTaskStore();
   const { session } = useSessionData();
+  const {user}= useUser()
   const [showModel, setShowModel]= useState(false)
   const [taskToDelete, setTaskToDelete] = useState<Task | null>(null);
   const [loading, setLoading]= useState(false)
 
   const getTask = async () => {
-    if(session){
+    if(user){
     setLoading(true);
     
     try {
@@ -68,10 +70,10 @@ const deleteTask = async (id: number) => {
   }
 };
   useEffect(() => {
-    if (session) {
+    if (user) {
       getTask(); // Only run if session data is available
     }
-  }, [session]); // Re-run whenever session data updates
+  }, [user]); // Re-run whenever session data updates
 
   const triggerfetch = async () => {
     await getTask();

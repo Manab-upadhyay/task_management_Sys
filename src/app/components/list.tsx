@@ -10,6 +10,7 @@ import ClipLoader from "react-spinners/ClipLoader";
 import { MdDelete } from "react-icons/md";
 import { DialogBox } from '../models/dialog';
 import { useSessionData } from '../hooks/useSession';
+import { useUser,UserButton } from "@clerk/nextjs";
 
 const override: CSSProperties = {
   display: "block",
@@ -22,14 +23,18 @@ export default function List() {
   const { taskdata, setTaskData } = useTaskStore();
   const { handdleDelete, confirmDelete, setShowModel, showModel,loading } = useListHandler();
   const {session}= useSessionData()
+  const {user}= useUser()
 
   useEffect(() => {
-    console.log(taskdata);
-  }, [taskdata]);
+    if (!user) {
+      // Clear task data if the user is not logged in
+      setTaskData([]);
+    }
+  }, [user, setTaskData]);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen w-full">
-    {!session ? (
+    {!user ? (
   <div className="flex flex-col items-center justify-center h-64 text-gray-500">
     <svg
       className="w-16 h-16 mb-4 text-gray-400"
