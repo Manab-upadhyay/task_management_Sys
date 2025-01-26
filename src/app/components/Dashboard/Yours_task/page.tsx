@@ -17,6 +17,7 @@ import { Router } from 'next/router';
 import Link from 'next/link';
 import { task } from '@/app/models/task';
 import { AnyAaaaRecord } from 'dns';
+import { useUser } from '@clerk/nextjs';
 const override: CSSProperties = {
   display: "block",
   margin: "0 auto",
@@ -26,6 +27,7 @@ const override: CSSProperties = {
 export default function List() {
   const [filterdata, setfilterdata] = useState<any[]>([]);
   const [pending, setpending]= useState([])
+  const {user}= useUser()
   const {
     handleCheckboxChange,
     handleEditClick,
@@ -52,7 +54,7 @@ export default function List() {
   useEffect(() => {
     getdata();
  
-  }, [session]);
+  }, [user]);
  
    useEffect(() => {
     const now= Date.now()

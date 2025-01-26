@@ -6,6 +6,7 @@ import { collection,addDoc,getDocs,query,where,DocumentData,updateDoc,doc } from
 import { toast } from "react-toastify";
 import { BsWindowSidebar } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import { useUser } from '@clerk/nextjs';
 interface TeamMember {
     name: string;
     email: string;
@@ -27,6 +28,7 @@ export function useCreateTeam() {
   const [showDeleteModel,setShowDeleteModel]= useState(false)
   const[email,setEmail]=useState<string|null>(null)
   const router= useRouter()
+  const {user}= useUser()
 
   function handleInputChange(index:number, field:keyof TeamMember, value:string) {
     const updatedTeam = [...team];
@@ -39,7 +41,7 @@ setTeamname(e.target.value)
    async function addMember() {
     try {
    
-      const teamQuery = query(collection(db, "teams"), where("admin", "==", session?.user?.email));
+      const teamQuery = query(collection(db, "teams"), where("admin", "==", user?.emailAddresses));
       
       
       const docRef = await getDocs(teamQuery);
@@ -127,7 +129,7 @@ setError(null)
       // No existing team, so create a new one
       const newTeam = {
         teamName,
-        admin: session?.user?.email,
+        admin: user?.emailAddresses,
         members: team,
         createdAt: new Date(),
       };
@@ -150,7 +152,7 @@ setError(null)
   async function getTeam() {
     try {
    
-      const teamQuery = query(collection(db, "teams"), where("admin", "==", session?.user?.email));
+      const teamQuery = query(collection(db, "teams"), where("admin", "==", user?.emailAddresses));
       
       
       const docRef = await getDocs(teamQuery);

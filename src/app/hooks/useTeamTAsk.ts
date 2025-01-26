@@ -2,6 +2,7 @@ import { useState } from "react";
 import { collection, query, where, getDocs,updateDoc,doc } from "firebase/firestore";
 import { useSessionData } from "./useSession";// Your Firestore initialization file
 import { db } from "../firebase/firebase";
+import { useUser } from '@clerk/nextjs';
 
 // Interfaces
 interface Task {
@@ -27,13 +28,14 @@ export  function useTeamTask() {
   const [teamTask, setTeamdata] = useState<FirestoreTeam[]>([]);
   const {session}= useSessionData()
   const [updatedTasks, setUpdatedTasks] = useState(teamTask);
+  const {user}= useUser()
 
   const getTeamTask = async () => {
     try {
       // Query Firestore for teams where the current user is the admin
       const teamQuery = query(
         collection(db, "teams"), // Replace "teams" with your Firestore collection name
-        where("admin", "==", session?.user?.email) // Replace with the current user's email
+        where("admin", "==", user?.emailAddresses) // Replace with the current user's email
       );
 
       // Fetch documents from Firestore

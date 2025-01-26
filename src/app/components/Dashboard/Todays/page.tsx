@@ -6,11 +6,12 @@ import { CiCalendarDate, CiClock2 } from "react-icons/ci";
 import { useTheme } from '../../../context/ThemeContext';
 import { useTaskStore } from 'src/app/zunstand/taskstore';
 import { useSessionData } from 'src/app/hooks/useSession';
-
+import { useUser } from '@clerk/nextjs';
 export default function List() {
   const { theme } = useTheme();
   const { session } = useSessionData();
   const [taskdata, settaskdata] = useState<any[]>([]);
+const {user}= useUser()
 
   useEffect(() => {
     async function fetchData() {
@@ -26,7 +27,7 @@ export default function List() {
       }
     }
     fetchData();
-  }, [session?.user?.email]);
+  }, [user]);
 
   // Get today's date in "DD-MMMM-YYYY" format
   const todayDateString = dayjs().format("DD-MMMM-YYYY");
@@ -66,7 +67,7 @@ export default function List() {
         <p className="text-sm">All tasks are complete or in the past</p>
       </div>
     ) : (
-      // Show upcoming tasks header if there are upcoming tasks
+    
       <h1
         className={`${
           theme === 'dark' ? "text-black" : "text-white"

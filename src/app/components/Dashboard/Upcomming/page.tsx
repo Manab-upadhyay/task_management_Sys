@@ -6,13 +6,14 @@ import { useTaskStore } from 'src/app/zunstand/taskstore';
 import { useSessionData } from 'src/app/hooks/useSession';
 import { useEffect, useState } from 'react';
 import { CiCalendarDate, CiClock2 } from "react-icons/ci";
-
+import { useUser } from '@clerk/nextjs';
 
 export default function List() {
   const { theme } = useTheme();
   const {session}= useSessionData()
   const [taskdata, settaskdata]= useState <any[]>([])
   const [filterdata, setFilterdata]= useState<any[]>([])
+  const {user}= useUser()
   useEffect(()=>{
     async function fetchData(){
       try {
@@ -27,7 +28,7 @@ export default function List() {
      
     }
     fetchData()
-      },[session])
+      },[user])
 useEffect(()=>{
  
   const displayTask= taskdata.filter((task: any) => task.completed===false);
@@ -103,6 +104,7 @@ console.log("u-tsk",taskdata)
             <p className={`text-sm mb-4 ${theme === 'dark' ? 'text-white' : 'text-black'}`}>
   {task.description}
 </p>
+<hr></hr>
             <div className="flex items-center gap-2 mt-4 text-sm text-sky-600 dark:text-sky-300 bg-sky-100 dark:bg-slate-700 rounded-lg px-2 py-1 shadow-inner">
   <CiCalendarDate className="text-lg" />
   <p>{new Date(task.date).toLocaleDateString("en-US", { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' })}</p>

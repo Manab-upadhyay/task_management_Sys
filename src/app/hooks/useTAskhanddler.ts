@@ -48,7 +48,7 @@ const useManageTask=()=>{
             const data= await fetch('https://localhost:3000/api/Addtask') 
             console.log(data)
             const res= await data.json()
-            const filteredData = res.tasks.filter((task: any) => task.userid === session?.user?.email);
+            const filteredData = res.tasks.filter((task: any) => task.userid ===user.emailAddresses);
             setTaskData(filteredData)
         } catch (error) {
             console.log("error fetching data", error)

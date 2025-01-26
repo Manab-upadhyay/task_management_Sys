@@ -30,7 +30,7 @@ const useListHandler = () => {
       });
       const res = await response.json();
       console.log(res);
-      const filteredData = res?.tasks?.filter((task: any) => task.userid === session?.user?.email);
+      const filteredData = res?.tasks?.filter((task: any) => task.userid === user.emailAddresses);
       setTaskData(filteredData);
     } catch (error) {
       console.error("Error fetching tasks:", error);
