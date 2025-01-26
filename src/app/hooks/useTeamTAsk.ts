@@ -71,7 +71,7 @@ export  function useTeamTask() {
             tasks: (member.tasks || []).filter((_, index) => index !== tidx), // Remove task at index tidx
           };
         }
-        return member; // Unchanged members
+        return member; 
       });
   
       console.log("Updated Members:", updatedMembers);

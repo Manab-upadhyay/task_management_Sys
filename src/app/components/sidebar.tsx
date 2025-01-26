@@ -14,7 +14,7 @@ import Link from "next/link";
 import { Component } from "../hooks/componentClick";
 import { NotificationHandler } from "../hooks/notificationHandldler";
 import { CiLogout } from "react-icons/ci";
-
+import { useUser } from "@clerk/nextjs";
 
 
 const Sidebar: React.FC = () => {
@@ -24,7 +24,7 @@ const Sidebar: React.FC = () => {
 
   const { fetchNotifications } = NotificationHandler();
   const [isOpen, setIsOpen] = useState(false);
-  const {session}= useSessionData()
+  const {user}= useUser()
 
   useEffect(() => {
     fetchNotifications();
@@ -120,11 +120,11 @@ const Sidebar: React.FC = () => {
               </li>
             ))}
           </ul>
-          <div className={`${theme === 'dark' ? 'text-white' : 'text-black'} mt-96 cursor-pointer`}>
+        
 
-          {session&&<CiLogout   onClick={() => signOut({ callbackUrl: "https://localhost:3000" })}  className="ml-40"/>}
+         
           <UserProfile  />
-          </div>
+          
         </div>
 
       </aside>

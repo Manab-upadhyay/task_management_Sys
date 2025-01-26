@@ -170,7 +170,7 @@ setError(null)
   }
   async function DeleteMembers() {
     try {
-      // Filter out the member with the matching email
+   
       console.log("called del")
       const updatedMembers = teamdata[0]?.members.filter((mem) => mem.email !== email);
   
