@@ -17,7 +17,7 @@ import { DateProvider } from "./context/date";
 import { toast, ToastContainer } from 'react-toastify';
 import { TeamProvider } from "./context/teamContext";
 import { ClerkProvider } from '@clerk/nextjs'
-
+import { UserTeamTaskProvider } from "./context/userTeamTask";
 
 import 'react-toastify/dist/ReactToastify.css';
 import { useFCM } from "./hooks/useFmc";
@@ -38,8 +38,10 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+
        <ClerkProvider
        >
+   <UserTeamTaskProvider>
         <ThemeProvider>
      <SessionWrapper>
  
@@ -61,6 +63,7 @@ export default function RootLayout({
         </TeamProvider>
         </SessionWrapper>
         </ThemeProvider>
+        </UserTeamTaskProvider>
         </ClerkProvider>
        
       </body>

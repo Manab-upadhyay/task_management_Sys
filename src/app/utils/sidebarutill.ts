@@ -4,10 +4,15 @@ import { CiClock2 } from "react-icons/ci";
 import { MdIncompleteCircle } from "react-icons/md";
 import { IoTodayOutline } from "react-icons/io5";
 import { useTeam } from "../context/teamContext";
+import { useTaskContext } from "../context/userTeamTask";
+import { useEffect } from "react";
 
 export const useDashboard = () => {
   const { teamCreated } = useTeam();
-
+  const {userTeamTasks}= useTaskContext() 
+useEffect(()=>{
+  console.log(userTeamTasks)
+})
   const dashboard = [
     {
       icon: IoIosAddCircle,
@@ -49,6 +54,12 @@ export const useDashboard = () => {
       name: "Team Task",
       link: "/components/Dashboard/TeamTask",
     },
+    userTeamTasks&&{
+      icon: MdIncompleteCircle,
+      name: "Assing  Task",
+      link: "/components/Dashboard/userAssingTask",
+
+    }
   ].filter(Boolean); // Remove falsy values like `false` or `null`
 
   return dashboard;

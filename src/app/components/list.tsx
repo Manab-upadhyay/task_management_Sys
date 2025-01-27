@@ -30,6 +30,7 @@ export default function List() {
       // Clear task data if the user is not logged in
       setTaskData([]);
     }
+    console.log("tasknadler",taskdata)
   }, [user, setTaskData]);
 
   return (
