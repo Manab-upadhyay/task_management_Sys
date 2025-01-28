@@ -44,7 +44,7 @@ requestPermission()
   
 
   return (
-    <div className={`flex min-h-screen space-x-10 ${theme === 'dark' ? 'bg-gray-200 text-white' : 'bg-white text-black'}`}>
+    <div className={`flex min-h-screen space-x-10 ${theme === 'dark' ? 'bg-gradient-to-r from-blue-100 to-purple-100 text-white' : 'bg-white text-black'}`}>
 
       
       <div className="relative w-full"> 

@@ -30,6 +30,7 @@ export function useCreateTeam() {
   const router= useRouter()
   const {user}= useUser()
 
+
   function handleInputChange(index:number, field:keyof TeamMember, value:string) {
     const updatedTeam = [...team];
     updatedTeam[index][field] = value;
@@ -96,7 +97,7 @@ setError(null)
    
     const teamQuery = query(
       collection(db, "teams"),
-      where("admin", "==", session?.user?.email)
+      where("admin", "==", user?.emailAddresses[0].emailAddress)
     );
     const docRef = await getDocs(teamQuery);
 
@@ -152,7 +153,7 @@ setError(null)
   async function getTeam() {
     try {
    
-      const teamQuery = query(collection(db, "teams"), where("admin", "==", user?.emailAddresses));
+      const teamQuery = query(collection(db, "teams"), where("admin", "==", user?.emailAddresses[0].emailAddress));
       
       
       const docRef = await getDocs(teamQuery);

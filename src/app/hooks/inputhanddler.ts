@@ -156,6 +156,7 @@ setShowAsingModel(false)
           email:member,
           date: formattedDate,
           time: formattedTime,
+          completed:false
         };
   
         // Add the task to the specific member's tasks array
