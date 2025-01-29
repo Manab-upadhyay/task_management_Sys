@@ -1,10 +1,11 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useUserTask } from "../../../hooks/userTeam"; // Assuming this hook provides ismemberExist
-
+import { useUser } from '@clerk/nextjs';
 export default function UserTasks() {
-  const { userTasks, getUserTasks, ismemberExist } = useUserTask();
+  const { userTasks, getUserTasks, ismemberExist,OnCheckBoxClick } = useUserTask();
   const [message, setMessage] = useState<string>("");
+  const {user}=useUser()
 
   useEffect(() => {
     getUserTasks();
@@ -49,18 +50,21 @@ export default function UserTasks() {
                       type="checkbox"
                       className="absolute top-4 right-4 w-5 h-5 text-blue-500 rounded focus:ring focus:ring-blue-300"
                       title="Mark task as done"
-                    />
+                    onClick={()=>OnCheckBoxClick(taskGroup.admin,i,taskGroup.id)}/>
                     <h3 className="text-xl font-semibold text-gray-800 mb-2">{task.title}</h3>
                     <p className="text-gray-600 mb-3">{task.description}</p>
                     <div className="text-sm text-gray-500 space-y-1">
                       <p>
-                        <strong>Date:</strong> {task.date}
+                        <strong>Date:{taskGroup.id}</strong> {task.date}
                       </p>
                       <p>
                         <strong>Time:</strong> {task.time}
                       </p>
                       <p>
                         <strong>Email:</strong> {task.email}
+                      </p>
+                      <p>
+                      <strong>status:</strong> {task.completed ? "completed" : "Not completed"}
                       </p>
                     </div>
                   </div>

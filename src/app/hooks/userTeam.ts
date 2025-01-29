@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { useUser } from "@clerk/nextjs";
 import { db } from "../firebase/firebase";
-import { collection, getDocs,query,doc,updateDoc,where } from "firebase/firestore";
+import { collection, getDocs,query,doc,updateDoc,where,getDoc } from "firebase/firestore";
 import { EmailAddress } from "@clerk/nextjs/server";
 
 interface TaskGroup {
-    admin: string; // Admin's email
-    tasks: string[]; // List of tasks
+  id:string
+    admin: string; 
+    tasks: string[]; 
   }
   interface Task {
     title: string;
@@ -54,6 +55,7 @@ console.log("member",member.tasks)
             setIsmemberexists(true)
           // If matched, add the tasks and admin email to the result
           tasksForUser.push({
+            id: doc.id,
             admin: teamData.admin,
                tasks: member.tasks || [],
           });
@@ -68,59 +70,50 @@ console.log("member",member.tasks)
       console.error("Error fetching user tasks:", error);
     }
   }
-  async function OnCheckBoxClick(admin: string, taskIndex: number) {
+  async function OnCheckBoxClick(admin: string, taskIndex: number,docid:string) {
     try {
       // Query to get the team where the current user is the admin and the member email matches
-      const teamQuery = query(
-        collection(db, "teams"),
-        where("admin", "==", admin),
-        where("members.email", "==", user?.emailAddresses[0].emailAddress)
-      );
-      
-      const docRef = await getDocs(teamQuery);
+      console.log("Admin:", admin);
+      console.log("Doc ID:", docid);
+      const teamDocRef = doc(db, "teams", docid);
+      const teamDocSnap = await getDoc(teamDocRef);
   
-      if (!docRef.empty) {
-        const teamDocId = docRef.docs[0].id; // Get the team document ID
-        const existingTeam = docRef.docs[0].data() as FirestoreTeam; // Team data
-  
-        // Find the member to update in the team's members array
-        const memberToUpdate = existingTeam.members.find((m) => m.email === user?.emailAddresses[0].emailAddress);
-  
-        if (!memberToUpdate) {
-          console.log("Member not found");
-          return;
-        }
-  
-        // Check if tasks is undefined or empty, and assign an empty array as fallback
-        const tasks = memberToUpdate.tasks || []; // If tasks is undefined, it will fallback to an empty array
-  
-        // Check if the taskIndex is valid (within range)
-        if (taskIndex < 0 || taskIndex >= tasks.length) {
-          console.log("Invalid task index");
-          return;
-        }
-  
-        // Update the specific task's status to completed for this member
-        const updatedTasks = [...tasks]; // Copy tasks to modify them
-        updatedTasks[taskIndex] = { ...updatedTasks[taskIndex], completed: true }; // Update the specific task
-  
-        // Update the member's tasks array with the modified task
-        const updatedMembers = existingTeam.members.map((m) => {
-          if (m.email === user?.emailAddresses[0].emailAddress) {
-            return {
-              ...m,
-              tasks: updatedTasks, // Updated tasks
-            };
-          }
-          return m;
-        });
-  
-        // Update the team document in Firestore with the new tasks data
-        await updateDoc(doc(db, "teams", teamDocId), { members: updatedMembers });
-        console.log(`Task at index ${taskIndex} updated to completed for ${user?.emailAddresses[0].emailAddress}`);
-      } else {
-        console.log("Team not found or member email does not match");
+      if (!teamDocSnap.exists()) {
+        console.log("Team document not found");
+        return;
       }
+  
+      const existingTeam = teamDocSnap.data() as FirestoreTeam;
+  
+      // Find the member whose email is "manab1233"
+      const memberIndex = existingTeam.members.findIndex((m) => m.email === "manab1233");
+  
+      if (memberIndex === -1) {
+        console.log("Member not found in the team");
+        return;
+      }
+  
+      // Get the member's tasks
+      const memberToUpdate = existingTeam.members[memberIndex];
+      const tasks = memberToUpdate.tasks || []; // Fallback to empty array if undefined
+  
+      // Validate the task index
+      if (taskIndex < 0 || taskIndex >= tasks.length) {
+        console.log("Invalid task index");
+        return;
+      }
+  
+      // Update the specific task's completed status
+      tasks[taskIndex] = { ...tasks[taskIndex], completed: true };
+  
+      // Update the members array with the modified tasks
+      const updatedMembers = [...existingTeam.members];
+      updatedMembers[memberIndex] = { ...memberToUpdate, tasks };
+  
+      // Update Firestore with the modified team document
+      await updateDoc(teamDocRef, { members: updatedMembers });
+await getUserTasks()
+      console.log(`Task at index ${taskIndex} updated to completed for ${memberToUpdate.email}`);
     } catch (error) {
       console.error("Error updating task status:", error);
     }
