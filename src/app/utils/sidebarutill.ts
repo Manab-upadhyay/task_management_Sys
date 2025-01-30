@@ -6,6 +6,9 @@ import { IoTodayOutline } from "react-icons/io5";
 import { useTeam } from "../context/teamContext";
 import { useTaskContext } from "../context/userTeamTask";
 import { useEffect } from "react";
+import { AiOutlineTeam } from "react-icons/ai";
+import { MdCreateNewFolder } from "react-icons/md";
+import { GoTasklist } from "react-icons/go";
 
 export const useDashboard = () => {
   const { teamCreated } = useTeam();
@@ -40,7 +43,7 @@ useEffect(()=>{
       link: "/components/Dashboard/Completed",
     },
     !teamCreated && {
-      icon: MdIncompleteCircle,
+      icon: MdCreateNewFolder,
       name: "Create Team",
       link: "/components/Dashboard/createTeam",
     },
@@ -50,17 +53,17 @@ useEffect(()=>{
       link: "/components/Dashboard/Team",
     },
     teamCreated && {
-      icon: MdIncompleteCircle,
+      icon: AiOutlineTeam,
       name: "Team Task",
       link: "/components/Dashboard/TeamTask",
     },
     userTeamTasks&&{
-      icon: MdIncompleteCircle,
+      icon: GoTasklist,
       name: "Assing  Task",
       link: "/components/Dashboard/userAssingTask",
 
     }
-  ].filter(Boolean); // Remove falsy values like `false` or `null`
+  ].filter(Boolean); 
 
   return dashboard;
 };

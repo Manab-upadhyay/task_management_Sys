@@ -32,6 +32,7 @@ const useListHandler = () => {
       console.log(res);
       console.log("email",user.emailAddresses[0].emailAddress)
       const filteredData = res?.tasks?.filter((task: any) => task.userid ===user.emailAddresses[0].emailAddress);
+      console.log(user.emailAddresses[0].emailAddress)
       setTaskData(filteredData);
     } catch (error) {
       console.error("Error fetching tasks:", error);

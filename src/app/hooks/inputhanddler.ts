@@ -11,6 +11,7 @@ import { toast, ToastContainer } from 'react-toastify';
 
 import { db } from "../firebase/firebase";
 import { collection,getDocs,where,query,updateDoc,doc } from "firebase/firestore";
+import { useUser } from "@clerk/nextjs";
 interface Task {
     title: string;
     description: string;
@@ -37,6 +38,7 @@ export function useTaskHandler() {
     const [error, seterror]= useState(String)
     const [showAsingModel, setShowAsingModel]= useState(false)
     const [member,setmember]=useState<string|null>(null)
+    const {user}= useUser()
     // const {settaskdata}= useListHandler()
     // const addTask = useTaskStore((state) => state.addTask);
     
@@ -57,7 +59,7 @@ export function useTaskHandler() {
             console.log("calling")
             const getToken = sessionStorage.getItem("fmc");
             const taskData = {
-                userid: session?.user?.email,
+                userid: user?.emailAddresses[0].emailAddress,
                 title,
                 description,
                 date: formattedDate,

@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase/firebase";
 import { useSessionData } from "../hooks/useSession";
-
+import { useUser } from "@clerk/nextjs";
 
 interface Team{
    
@@ -12,12 +12,12 @@ const TeamContext = createContext<any>(null);
 export const TeamProvider = ({ children }:Team) => {
   
   const [teamCreated, setTeamCreated] = useState(false);
-  const {session}= useSessionData()
+  const {user}= useUser()
 
   async function checkTeam() {
     try {
       const docRef = await getDocs(collection(db, "teams"));
-      const isAdmin = docRef.docs.some((team) => team.data().admin === session?.user?.email);
+      const isAdmin = docRef.docs.some((team) => team.data().admin === user?.emailAddresses[0].emailAddress);
       setTeamCreated(isAdmin);
     } catch (error) {
       console.error("Error checking team:", error);
@@ -25,10 +25,10 @@ export const TeamProvider = ({ children }:Team) => {
   }
 
   useEffect(() => {
-    if (session?.user?.email) {
+    if (user?.emailAddresses[0].emailAddress) {
       checkTeam();
     }
-  }, [session]);
+  }, [user]);
 
   return (
     <TeamContext.Provider value={{ teamCreated, checkTeam }}>

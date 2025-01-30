@@ -54,6 +54,7 @@ console.log("call")
                 <p className="text-sm text-gray-500"><strong>Description:</strong> {task.description}</p>
                 <p className="text-sm text-gray-500"><strong>Assigned Date:</strong> {task.date}</p>
                 <p className="text-sm text-gray-500"><strong>Time:</strong> {task.time}</p>
+                <p className="text-sm text-gray-500"><strong>status:</strong> {task.completed?"completed":"Not completed"}</p>
               </div>
             ))}
           </div>

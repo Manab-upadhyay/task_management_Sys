@@ -48,7 +48,7 @@ export function useUserTask() {
 
         // Check if the logged-in user's email matches any member's email
         const member = teamData.members.find(
-          (member:any) => member.email === "manab1233"
+          (member:any) => member.email === "itclub.aus@gmail.com"
         );
 console.log("member",member.tasks)
         if (member) {
@@ -86,7 +86,7 @@ console.log("member",member.tasks)
       const existingTeam = teamDocSnap.data() as FirestoreTeam;
   
       // Find the member whose email is "manab1233"
-      const memberIndex = existingTeam.members.findIndex((m) => m.email === "manab1233");
+      const memberIndex = existingTeam.members.findIndex((m) => m.email === "itclub.aus@gmail.com");
   
       if (memberIndex === -1) {
         console.log("Member not found in the team");
