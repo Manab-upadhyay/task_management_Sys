@@ -10,6 +10,7 @@ import { useUser } from '@clerk/nextjs';
 interface TeamMember {
     name: string;
     email: string;
+   
   }
   interface FirestoreTeam {
     teamName: string;

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useCreateTeam } from "../../../hooks/usecreateTeam";
 import AddMembers from "@/app/models/addMembers";
 import { DialogBox } from "@/app/models/dialog";
+import Avatar from 'react-avatar';
 
 export default function DisplayTeam() {
   const { teamdata, getTeam, DeleteMembers, showModel, model, showDelModel, showDeleteModel, handledelete } = useCreateTeam();
@@ -52,11 +53,8 @@ export default function DisplayTeam() {
               />
 
               {/* Member Avatar */}
-              <img
-                className="w-20 h-20 rounded-full object-cover border-4 border-gray-100 mb-4"
-                src={member.avatar || "https://flowbite.s3.amazonaws.com/blocks/marketing-ui/avatars/bonnie-green.png"}
-                alt={member.name}
-              />
+            
+              <Avatar name={member.name}   className="w-20 h-20 rounded-full object-cover border-4 border-gray-100 mb-4"/>
 
               {/* Member Info */}
               <div className="text-center">
