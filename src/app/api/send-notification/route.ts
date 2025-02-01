@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../firebase/firebase"; // Ensure this exports your Firestore instance
 import { collection, addDoc, Timestamp, getDocs, deleteDoc, doc } from "firebase/firestore";
 
-const serviceAccount = require("../../../task-management-77408-firebase-adminsdk-4u7i2-8dc38cef6b.json")
+const serviceAccount = require("../../../task-management-77408-firebase-adminsdk-4u7i2-b19fcf7140.json")
 
 if (!admin.apps.length) {
   admin.initializeApp({
