@@ -1,80 +1,46 @@
 "use client";
-import Image from "next/image";
-import Sidebar from "./components/sidebar";
-import InputBox from "./components/inputBox";
-import List from "./components/list";
-import { FaRegMoon } from "react-icons/fa";
-import { ModeToggle } from "./hooks/Theme";
-import { RiMoonClearFill } from "react-icons/ri";
+import React from "react";
+import { Boxes } from "../app/ui/bg";
+import { cn } from "../app/utils/bg";
+import WobbleCardDemo from "../app/components/wooblecards"
+import { HeroParallaxDemo } from "../app/components/herroparellex";
 
-import { useModal } from "./context/LoginModel";
-import { useTheme } from "./context/ThemeContext";
-import { Component } from "./hooks/componentClick";
-import { useFCM } from "./hooks/useFmc";
-import { useEffect } from "react";
-import { isAsyncFunction } from "util/types";
-
-export default function Home() {
-  const { showModal } = useModal(); 
-  const {theme, toggleTheme } = useTheme(); 
-  const {component}= Component()
-  const {requestPermission}= useFCM()
-  console.log(component)
-
-  useEffect(()=>{
-requestPermission()
-  })
-  async function handdleclick() {
-    try {
-      await fetch("https://localhost:3000/api/send-notification", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json", // Set the content type to JSON
-        },
-        body: JSON.stringify({
-          title: "test",
-          message: "test-body",
-          token: "fjCZ0l8x3vWddwiTd_YMb6:APA91bH1I3XPWxeCEko8i-u8ZkxyZHavQtqjR8by4YvJvdjf3E6NR5xo6S6KhnSxy7hc8WbIUly1JUucH927-xOYBqTxJZABTxPtrIkbh0mjf7Dgl_moXCg",
-        }),
-      });
-    } catch (error) {
-      console.log("error", error);
-    }
-  }
-  
-
+export default function BackgroundBoxesDemo() {
   return (
-    <div className={`flex min-h-screen space-x-10 ${theme === 'dark' ? 'bg-gradient-to-r from-blue-100 to-purple-100 text-white' : 'bg-white text-black'}`}>
+    <>
+    <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
+      <div className="absolute inset-0 w-full h-full bg-slate-900 z-20 [mask-image:radial-gradient(transparent,white)] pointer-events-none" />
 
-      
-      <div className="relative w-full"> 
-        
-        {theme === "dark" ? (
-          <RiMoonClearFill 
-            className="absolute text-black top-4 right-10 cursor-pointer transition-transform duration-200 hover:scale-110"
-            size={20}
-            onClick={toggleTheme} 
-            aria-label="Switch to light theme"
-          />
-        ) : (
-          <FaRegMoon 
-            className="absolute top-4 right-10 cursor-pointer transition-transform duration-200 hover:scale-110"
-            size={20}
-            onClick={toggleTheme} 
-            aria-label="Switch to dark theme"
-          />
-        )}
-
-
-          <div className="flex flex-col items-center justify-center w-full p-8 mb-32">
-            <InputBox />
-            <button onClick={handdleclick} className="text-black">Notification</button>
-            <List />
-          </div>
-     
-
-       
-      </div>
+      <Boxes />
+      <h1 className={cn("md:text-4xl text-xl text-white relative z-20")}>
+     Welcome To Task Management System
+      </h1>
+      <p className="text-center mt-2 text-neutral-300 relative z-20">
+        Tasks Made Easy
+      </p>
     </div>
+ 
+    <HeroParallaxDemo></HeroParallaxDemo>
+    <footer className="bg-white rounded-lg shadow-sm m-4 dark:bg-gray-800">
+    <div className="w-full mx-auto max-w-screen-xl p-4 md:flex md:items-center md:justify-between">
+      <span className="text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2023 <a href="https://flowbite.com/" className="hover:underline">Flowbite™</a>. All Rights Reserved.
+    </span>
+    <ul className="flex flex-wrap items-center mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0">
+        <li>
+            <a href="#" className="hover:underline me-4 md:me-6">About</a>
+        </li>
+        <li>
+            <a href="#" className="hover:underline me-4 md:me-6">Privacy Policy</a>
+        </li>
+        <li>
+            <a href="#" className="hover:underline me-4 md:me-6">Licensing</a>
+        </li>
+        <li>
+            <a href="#" className="hover:underline">Contact</a>
+        </li>
+    </ul>
+    </div>
+</footer>
+    </>
   );
 }

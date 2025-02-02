@@ -20,7 +20,7 @@ useEffect(()=>{
     {
       icon: IoIosAddCircle,
       name: "Add Task",
-      link: "/",
+      link: "/components/Dashboard/Add-Task",
     },
     {
       icon: VscTasklist,
