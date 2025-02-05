@@ -34,7 +34,7 @@ requestPermission()
         body: JSON.stringify({
           title: "test",
           message: "test-body",
-          token: "fjCZ0l8x3vWddwiTd_YMb6:APA91bH1I3XPWxeCEko8i-u8ZkxyZHavQtqjR8by4YvJvdjf3E6NR5xo6S6KhnSxy7hc8WbIUly1JUucH927-xOYBqTxJZABTxPtrIkbh0mjf7Dgl_moXCg",
+          token: "fjCZ0l8x3vWddwiTd_YMb6:APA91bFeNLtXHP6B6Gq5y9YtfUsdTr7eYtA3sswKy3ON2jejjHdeQZO3hThBIgHCTYQHTzpgoC91a7mXnSU0rW6eUEnd4mAmgI8FiU1p7h771V5Mp928rzs",
         }),
       });
     } catch (error) {

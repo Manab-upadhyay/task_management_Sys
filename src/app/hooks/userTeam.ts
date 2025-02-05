@@ -3,6 +3,7 @@ import { useUser } from "@clerk/nextjs";
 import { db } from "../firebase/firebase";
 import { collection, getDocs,query,doc,updateDoc,where,getDoc } from "firebase/firestore";
 import { EmailAddress } from "@clerk/nextjs/server";
+import { headers } from "next/headers";
 
 interface TaskGroup {
   id:string
@@ -75,6 +76,14 @@ console.log("member",member.tasks)
       // Query to get the team where the current user is the admin and the member email matches
       console.log("Admin:", admin);
       console.log("Doc ID:", docid);
+      const getToken = sessionStorage.getItem("fmc");
+      await fetch ("https://localhost:3000/api/send-notification",{
+        headers:{
+          "content-type":"application/json",
+        },
+        body:JSON.stringify({token:getToken,title:"Task completed",body:"Task has been completed by the user"})
+      }
+      )
       const teamDocRef = doc(db, "teams", docid);
       const teamDocSnap = await getDoc(teamDocRef);
   

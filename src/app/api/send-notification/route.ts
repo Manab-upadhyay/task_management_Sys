@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../firebase/firebase"; // Ensure this exports your Firestore instance
 import { collection, addDoc, Timestamp, getDocs, deleteDoc, doc } from "firebase/firestore";
 
-const serviceAccount = require("../../../task-management-77408-firebase-adminsdk-4u7i2-b19fcf7140.json")
+const serviceAccount = require("../../../../task-management-77408-firebase-adminsdk-4u7i2-5b6a0837ed.json")
 
 if (!admin.apps.length) {
   admin.initializeApp({
@@ -13,7 +13,7 @@ if (!admin.apps.length) {
 
 export async function POST(req: NextRequest) {
   const { token, title, message, link, userid } = await req.json();
-
+console.log(token)
   const payload = {
     token: token,
     notification: {
