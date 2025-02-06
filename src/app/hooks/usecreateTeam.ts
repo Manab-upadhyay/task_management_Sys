@@ -15,6 +15,7 @@ interface TeamMember {
   interface FirestoreTeam {
     teamName: string;
     admin: string;
+    fcm:string,
     members: TeamMember[];
     createdAt: Date;
   }
@@ -95,6 +96,7 @@ setError(null)
   }
 
   try {
+    const getToken = sessionStorage.getItem("fmc");
    
     const teamQuery = query(
       collection(db, "teams"),
@@ -132,6 +134,7 @@ setError(null)
       const newTeam = {
         teamName,
         admin: user?.emailAddresses,
+        fcm:getToken ,
         members: team,
         createdAt: new Date(),
       };

@@ -47,7 +47,7 @@ export default function UserTasks() {
                     key={i}
                     className="relative bg-gradient-to-r from-white to-gray-50 p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition duration-300"
                   >
-                    {<input
+                    {!task.completed&&<input
                       type="checkbox"
                       className="absolute top-4 right-4 w-5 h-5 text-blue-500 rounded focus:ring focus:ring-blue-300"
                       title="Mark task as done"
