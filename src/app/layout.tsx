@@ -55,6 +55,7 @@ export default function RootLayout({
           {pathname !== '/auth' && <Sidebar /> }
     
           {children}
+          <ToastContainer></ToastContainer>
      
         </ThemeWrapper>
         </ModalProvider>

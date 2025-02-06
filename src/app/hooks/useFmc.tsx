@@ -40,56 +40,21 @@ export function useFCM() {
       // Listen for foreground messages using onMessage
       onMessage(messaging, (payload) => {
         console.log("Foreground message received", payload);
-
-  
+      
+        const title = payload.notification?.title || payload.data?.title;
+        const body = payload.notification?.body || payload.data?.body;
+        const link = payload.fcmOptions?.link || payload.data?.link || "/";
+      
         toast.info(
-          <div
-            style={{
-              backgroundColor: '#fff',
-              color: '#000',
-              padding: '10px 15px',
-              borderRadius: '6px',
-              border: '1px solid #e0e0e0',
-              fontFamily: 'Arial, sans-serif',
-              maxWidth: '300px',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'flex-start',
-              boxShadow: '0px 2px 4px rgba(0, 0, 0, 0.1)',
-            }}
-          >
-            <strong style={{ fontSize: '15px', marginBottom: '5px' }}>
-              {payload.notification?.title}
-            </strong>
-            <p style={{ margin: '0 0 8px 0', fontSize: '14px', lineHeight: '1.4' }}>
-              {payload.notification?.body}
-            </p>
-            <button
-              style={{
-                backgroundColor: 'transparent',
-                color: '#007bff',
-                fontSize: '14px',
-                padding: '0',
-                cursor: 'pointer',
-                border: 'none',
-                textDecoration: 'underline',
-                alignSelf: 'flex-start',
-              }}
-              onClick={() => window.open(payload.fcmOptions?.link || "/", '_blank')}
-            >
-              View
-            </button>
+          <div>
+            <strong>{title}</strong>
+            <p>{body}</p>
+            <button onClick={() => window.open(link, "_blank")}>View</button>
           </div>,
-          {
-            autoClose: 5000,
-            hideProgressBar: true,
-            closeOnClick: true,
-            draggable: true,
-            position: 'bottom-right',  // Position the toast in bottom-right corner
-            theme: 'light',
-          }
+          { position: "bottom-right", autoClose: 5000 }
         );
       });
+      
     };
 
     setupListener();  // Setup the listener after requesting permission

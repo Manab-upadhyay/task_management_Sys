@@ -8,7 +8,7 @@
 
 # Ignore testing files
 /coverage
-C:\Users\sarma\TaskManagement\my-app\task-management-77408-firebase-adminsdk-4u7i2-5b6a0837ed.json
+/task-management-77408-firebase-adminsdk-4u7i2-5b6a0837ed.json
 
 # Ignore environment files
 .env*.local

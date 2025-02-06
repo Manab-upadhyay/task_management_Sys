@@ -7,6 +7,7 @@ import { headers } from "next/headers";
 
 interface TaskGroup {
   id:string
+ fcm:string
     admin: string; 
     tasks: string[]; 
   }
@@ -58,6 +59,7 @@ console.log("member",member.tasks)
           tasksForUser.push({
             id: doc.id,
             admin: teamData.admin,
+            fcm:teamData.fcm,
                tasks: member.tasks || [],
           });
         }
@@ -71,13 +73,17 @@ console.log("member",member.tasks)
       console.error("Error fetching user tasks:", error);
     }
   }
-  async function OnCheckBoxClick(admin: string, taskIndex: number,docid:string) {
+  async function OnCheckBoxClick(admin: string, taskIndex: number,docid:string,fmc:string) {
     try {
       // Query to get the team where the current user is the admin and the member email matches
+      console.log("calling fxn")
       console.log("Admin:", admin);
       console.log("Doc ID:", docid);
+      console.log(fmc)
       const getToken = sessionStorage.getItem("fmc");
+   
       await fetch ("https://localhost:3000/api/send-notification",{
+        method:"POST",
         headers:{
           "content-type":"application/json",
         },

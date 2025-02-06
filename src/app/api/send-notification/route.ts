@@ -38,7 +38,6 @@ console.log(token)
     const docRef = await addDoc(notificationRef, {
       title,
       message,
-      userid,
       timestamp: Timestamp.now(), // Firestore's timestamp
     });
 
