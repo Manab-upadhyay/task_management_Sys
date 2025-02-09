@@ -82,12 +82,12 @@ console.log("member",member.tasks)
       console.log(fmc)
       const getToken = sessionStorage.getItem("fmc");
    
-      await fetch ("https://localhost:3000/api/send-notification",{
+      await fetch ("https://localhost:3000/api/send-teamNoti",{
         method:"POST",
         headers:{
           "content-type":"application/json",
         },
-        body:JSON.stringify({token:getToken,title:"Task completed",body:"Task has been completed by the user"})
+        body:JSON.stringify({token:getToken,title:"Task completed",body:`Task has been completed by ${user?.fullName}`,userid:admin,message:`Task has been completed by ${user?.fullName}`})
       }
       )
       const teamDocRef = doc(db, "teams", docid);

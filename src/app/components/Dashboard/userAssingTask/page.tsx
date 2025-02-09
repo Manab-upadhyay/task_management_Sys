@@ -47,11 +47,11 @@ export default function UserTasks() {
                     key={i}
                     className="relative bg-gradient-to-r from-white to-gray-50 p-6 rounded-xl shadow-lg border border-gray-200 hover:shadow-2xl transition duration-300"
                   >
-                    {!task.completed&&<input
+                    {<input
                       type="checkbox"
                       className="absolute top-4 right-4 w-5 h-5 text-blue-500 rounded focus:ring focus:ring-blue-300"
                       title="Mark task as done"
-                    onClick={()=>OnCheckBoxClick(taskGroup.admin,i,taskGroup.id,taskGroup.fcm)}/>}
+                    onClick={()=>OnCheckBoxClick(taskGroup.admin,i,taskGroup.id,taskGroup.fcm,)}/>}
                     <h3 className="text-xl font-semibold text-gray-800 mb-2">{task.title}</h3>
                     <p className="text-gray-600 mb-3">{task.description}</p>
                     <div className="text-sm text-gray-500 space-y-1">

@@ -14,9 +14,10 @@ export default function Notifications() {
     const date = new Date(milliseconds);
     return date.toLocaleString(); // Format the date to a readable format
   };
-  console.log("noti", notifications)
+ 
   useEffect(()=>{
     fetchNotifications()
+    console.log("noti", notifications)
   },[])
 
   return (

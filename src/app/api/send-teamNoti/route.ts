@@ -1,7 +1,7 @@
 import admin from "firebase-admin";
 import { NextRequest, NextResponse } from "next/server";
 import { db } from "../../firebase/firebase"; // Ensure this exports your Firestore instance
-import { collection, addDoc, Timestamp, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { collection, addDoc, Timestamp, getDocs, deleteDoc, doc,setDoc } from "firebase/firestore";
 
 const serviceAccount = require("../../../../task-management-77408-firebase-adminsdk-4u7i2-5b6a0837ed.json")
 
@@ -13,7 +13,7 @@ if (!admin.apps.length) {
 
 export async function POST(req: NextRequest) {
   const { token, title, message, link, userid } = await req.json();
-console.log(token)
+console.log(token,title,message,userid)
   const payload = {
     token: token,
     notification: {
@@ -34,12 +34,12 @@ console.log(token)
     await admin.messaging().send(payload);
 
     // Store the notification in Firestore
-    const notificationRef = collection(db, "notification");
+    const notificationRef = collection(db, "team-notifications");
     const docRef = await addDoc(notificationRef, {
       title,
       message,
       userid,
-      timestamp: Timestamp.now(), // Firestore's timestamp
+      timestamp: Timestamp.now(),
     });
 
     console.log("Notification saved:", docRef.id);
@@ -53,7 +53,7 @@ console.log(token)
 export async function GET() {
   try {
     // Fetch notifications from Firestore
-    const notificationsCollection = collection(db, "notification");
+    const notificationsCollection = collection(db, "team-notifications");
     const querySnapshot = await getDocs(notificationsCollection);
 
     const notifications: any = [];
@@ -76,7 +76,7 @@ export async function DELETE(req: NextRequest) {
     const { id } = await req.json();
 console.log(id)
     // Delete notification by ID
-    const notificationDoc = doc(db, "notification", id);
+    const notificationDoc = doc(db, "team-notifications", id);
     await deleteDoc(notificationDoc);
 
     return NextResponse.json(

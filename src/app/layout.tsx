@@ -4,7 +4,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import ThemeWrapper from "./wrappers/ThemeProvider";
-import {ModalProvider} from "../app/context/LoginModel"
+
 import Sidebar from "./components/sidebar";
 import { RiMoonClearFill } from "react-icons/ri";
 import { FaRegMoon } from "react-icons/fa";
@@ -48,7 +48,7 @@ export default function RootLayout({
      <TeamProvider>
       <DateProvider>
    <TimeProvider>
-        <ModalProvider>
+      
         <ThemeWrapper
          
         >
@@ -58,7 +58,7 @@ export default function RootLayout({
           <ToastContainer></ToastContainer>
      
         </ThemeWrapper>
-        </ModalProvider>
+       
         </TimeProvider>
         </DateProvider>
         </TeamProvider>

@@ -7,7 +7,7 @@ import { FaRegMoon } from "react-icons/fa";
 import { ModeToggle } from "../../../hooks/Theme";
 import { RiMoonClearFill } from "react-icons/ri";
 
-import { useModal } from "../../../context/LoginModel";
+
 import { useTheme } from "../../../context/ThemeContext";
 import { Component } from "../../../hooks/componentClick";
 import { useFCM } from "../../../hooks/useFmc";
@@ -15,7 +15,7 @@ import { useEffect } from "react";
 import { isAsyncFunction } from "util/types";
 
 export default function Home() {
-  const { showModal } = useModal(); 
+ 
   const {theme, toggleTheme } = useTheme(); 
   const {component}= Component()
   const {requestPermission}= useFCM()

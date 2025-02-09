@@ -1,11 +1,17 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { Boxes } from "../app/ui/bg";
 import { cn } from "../app/utils/bg";
 import WobbleCardDemo from "../app/components/wooblecards"
 import { HeroParallaxDemo } from "../app/components/herroparellex";
+import { NotificationHandler } from "./hooks/notificationHandldler";
+
 
 export default function BackgroundBoxesDemo() {
+  const {fetchNotifications}= NotificationHandler()
+  useEffect(()=>{
+    fetchNotifications()
+  })
   return (
     <>
     <div className="h-96 relative w-full overflow-hidden bg-slate-900 flex flex-col items-center justify-center rounded-lg">
